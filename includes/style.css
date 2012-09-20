@@ -1,0 +1,168 @@
+body {
+  font: 13px "Trebuchet MS";
+  color: #000;
+  background-color: #fff;
+  padding: 0px;
+  margin: 0px;
+}
+
+#header {
+	border-bottom: 1px dotted #000;
+	margin: 5px;
+	}
+
+a {
+  outline: none;
+  text-decoration: none;
+}
+
+#logo {
+	float: left;
+	font-size: 20px;
+	margin-left: 10px;
+}
+
+#logo h1 {
+	margin: 0px;
+	padding: 0px;
+}	
+
+#slogan {
+	float: left;
+	margin-top: 27px;
+	margin-left: 5px;
+}
+
+#menu {
+	float: right;
+	margin-right: 20px;
+}
+
+#menu ul {
+	list-style: none;
+}
+
+#menu li {
+	float: left;
+	background: #eee;
+	font-weight: bold;
+	margin: 1px;
+}
+
+#menu a {
+	color: #000;
+	padding: 7px;
+}
+
+#menu a:hover {
+	background: #000;
+	color: #ffffff;
+}
+
+#footer {
+	border-top: 1px dotted #000;
+	margin: 5px;
+	}
+
+.clear {
+	clear: both;
+}
+
+#content {
+	padding: 17px;
+	text-align: center;
+}
+.input {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	display: block;
+}
+
+.field {
+	display: block;
+	text-align: left;
+
+}
+
+.text_box {
+	width: 800px;
+	height: 32px;
+	font: 22px "Trebuchet MS";
+	border: 1px solid #444;
+	background: url(/images/form_bg.jpg) repeat-x;
+}
+
+.text_box_small {
+	width: 250px;
+	height: 32px;
+	float: left;
+	font: 22px "Trebuchet MS";
+	border: 1px solid #444;
+	background: url(/images/form_bg.jpg) repeat-x;
+}
+
+.submit_button {
+	background: url(/images/gradient.png);
+	border: none;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 6px;
+	width: 120px;
+	color: #fff;
+	font-weight: bold;
+}
+.submit_button:hover {
+	background: url(/images/gradient_hover.png);
+	color: #eee;
+}
+
+#options {
+	display: none;
+}
+
+.pre {
+	font: 22px "Trebuchet MS";
+	float: left;
+	padding: 2px;
+}
+#error {
+	color: #ff1111;
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+}
+	
+#expand {
+	cursor: pointer;
+}
+
+#url_list {
+  border: 0;
+}
+
+#url_list td {
+  padding: 3px;
+  background-color: #eee;
+}
+#staterror_title {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-size:24px;
+	margin-top: 5px; margin-bottom: 0px;
+	text-align: center;
+        font-weight: normal;
+        color: #222;
+}
+#staterror_text {
+        font-family: "Lucida Grande", Tahoma;
+	font-size: 10px;
+	font-weight: lighter;
+	font-variant: normal;
+	text-transform: uppercase;
+	color: #666666;
+        margin-top: 10px;
+	text-align: center!important;
+	letter-spacing: 0.3em;
+}

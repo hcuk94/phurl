@@ -1,0 +1,31 @@
+body {
+  font: 14px Arial;
+  color: #000;
+  background-color: #fff;
+}
+
+a {
+  outline: none;
+  -moz-outline: 0;
+  text-decoration: none;
+}
+
+h2 {
+  font: bold 15px Arial;
+}
+
+#error {
+  color: #d00;
+  margin: 0;
+  padding: 0;
+  margin-left: 15px;
+}
+
+#url_list {
+  border: 0;
+}
+
+#url_list td {
+  padding: 3px;
+  background-color: #eee;
+}
