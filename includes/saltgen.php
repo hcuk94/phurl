@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
 echo generate_salt(32)."\n";
 
 function generate_salt($len) {
@@ -33,42 +31,5 @@ function generate_salt($len) {
 		}
 	}
 	return $salt;
-}
-exit();
-/*
-Created by PatPatrson
-Minor contributions by TechnoBulldog
-Released under the UNLICENSE (as described in COPYING)
-*/
-
-// The one and only function to generate a salt
-function saltgen($length) {
-// We have to declare $salt first, lest we get errors
-$salt = "";
-	// Fills $salt with as many uniqid's as we need
-	while(strlen($salt) < $length) {
-	// Adds a uniqid to $salt
-	$salt = $salt . uniqid(uniqid(mt_rand(1000,9999),true), true);
-	}
-
-// Do I really need to explain what $i does?
-$i = 0;
-// $salt2 is declared for the same reason as $salt, and
-// we use it to hold the value of salt while we shorten
-// it.
-$salt2 = "";
-
-	// The above while() might make our salt a bit too
-	// long, so this is necessary to shorten it
-	while($i < $length) {
-	// Adds one character from $salt to $salt2 each
-	// time it's run
-	$salt2 = $salt2 . $salt[$i];
-	// Increments $i, duh
-	$i++;
-	}
-
-// Returns the salt
-return $salt2;
 }
 ?>
