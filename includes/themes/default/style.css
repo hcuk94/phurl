@@ -235,3 +235,23 @@ border-style: none;
         text-align: center!important;
         letter-spacing: 0.3em;
 }
+#login {
+	margin-top: 100px;
+	margin-bottom: 100px;
+	width: 50%;
+	float: left;
+}
+#login #user_login {
+	margin: auto;
+	padding: auto;
+}
+#register {
+	margin-top: 100px;
+	margin-bottom: 100px;
+	width: 50%;
+	float: right;
+}
+#register #user_reg {
+	margin: auto;
+	padding: auto;
+}

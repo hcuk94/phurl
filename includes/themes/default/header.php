@@ -12,6 +12,13 @@ $alias = str_replace("-","",$alias);
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title><?php echo get_phurl_option('site_title'); ?> | <?php echo get_phurl_option('site_slogan'); ?></title>
+<?php
+if (isset( $WORKING_DIR )) {
+?>
+<base href="<?php echo $WORKING_DIR; ?>">
+<?php
+}
+?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="<?php echo get_phurl_option('theme_path'); ?>style.css" />
 	<script type="text/javascript" src="<?php echo get_phurl_option('theme_path'); ?>jquery.js"></script>
@@ -91,6 +98,12 @@ echo $jquery;
  		<ul>
  			<li><a href="/">Home</a></li>
 <li><a href="/api/create.php?url=http://example.org/">API</a></li>
+	<?php if (is_login()) { ?>
+ 			<li><a href="/admin/">Panel</a></li>
+	<?php } else { ?>
+ 			<li><a href="/admin/login.php">Login/Signup</a></li>
+	<?php } ?>
+
 
  		</ul>
  	</div>

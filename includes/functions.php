@@ -154,3 +154,6 @@ function is_admin_login() {
 
     return false;
     }
+function is_login() {
+return false;
+}

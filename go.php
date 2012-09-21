@@ -15,7 +15,7 @@ if (preg_match("/^[a-zA-Z0-9_-]+\-$/", $alias)) {
   include "includes/themes/default/footer.php";
   die();
 } elseif (!preg_match("/^[a-zA-Z0-9_]+$/", $alias)) {
-  header("Location: ".SITE_URL, true, 301);
+  header("Location: ".get_phurl_option('site_url'), true, 301);
   exit();
 } else {
 
@@ -45,5 +45,5 @@ header("Location: $url", true, 301);
 }
 }
 }
- header("Location: ".SITE_URL, true, 301);
+ header("Location: ".get_phurl_option('site_url'), true, 301);
 ?>

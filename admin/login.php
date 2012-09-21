@@ -1,31 +1,79 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 session_start();
-require_once("../config.php");
-require_once("../functions.php");
 
-if (count($_POST) > 0) {
-    if ($_POST['username'] == ADMIN_USERNAME && $_POST['password'] == ADMIN_PASSWORD) {
-        $_SESSION['admin'] = 1;
+// Define PHURL to allow includes
+define('PHURL', true);
 
-        session_write_close();
-        header("Location: index.php", true, 301);
-        exit();
-    }
-    else {
-        $_ERROR[] = "Wrong username or password.";
+require_once("../includes/config.php");
+require_once("../includes/functions.php");
+db_connect();
 
-        print_errors();
-    }
+//require_once("header.php");
+$WORKING_DIR = '../';
+if (file_exists("../".get_phurl_option('theme_path') . "header.php")) {
+        include ("../".get_phurl_option('theme_path') . "header.php");
+
+} else {
+        die ("<h2>Could not load theme</h2>");
 }
-require_once("header.php");
 print_errors();
 ?>
-<h2>Administration Login</h2>
-<form method="post" action="login.php">
-<table id="admin_login">
+<?php
+if (isset($_POST['form']) && $_POST['form'] == "login") {
+	
+} elseif (isset($_POST['form']) && $_POST['form'] == "register") {
+
+	// Remove some unwanted characters
+	$uname = mysql_real_escape_string(trim($_POST['uname']));
+	$email = mysql_real_escape_string(trim($_POST['email']));
+	$fname = mysql_real_escape_string(trim($_POST['fname']));
+	$lname = mysql_real_escape_string(trim($_POST['lname']));
+	$password = mysql_real_escape_string(trim($_POST['password']));
+
+	// Make sure everything has been set
+	if (
+	(!isset($uname) || $uname == "") || 
+	(!isset($email) || $email == "") || 
+	(!isset($fname) || $fname == "") || 
+	(!isset($lname) || $lname == "") || 
+	(!isset($password) || $password == "")) {
+		$_ERROR[] = "Please complete the whole form<br />";
+	} else {
+		//$_ERROR[]
+		// Check if the username or email is already know to us
+		$db_result = mysql_query("SELECT id,uname,email FROM ".DB_PREFIX."users WHERE `uname`='".$uname."' OR `email`='".$email."';");
+		if ($db_result != false && mysql_num_rows($db_result) != 0) {
+			while ($db_row = mysql_fetch_assoc($db_result)) {
+				$takenUname = $db_row['uname'];
+				$takenEmail = $db_row['email'];
+				if ($takenUsername = $uname) {
+					$_ERROR[] = "The selected username is already taken, plase choose another one.<br />";
+				}
+				if ($takenEmail == $email) {
+					$_ERROR[] = "The selected email address is already in our database, please choose another one.<br />";
+				}
+			}
+		} else {
+			$passwordNew = hash('sha256', hash('sha256', $password.).SITE_SALT);
+		}
+	}
+} 
+?>
+<div id="login">
+<h2>User Login</h2>
+<form method="post" action="admin/login.php">
+<?php
+if (isset($_POST['form']) && $_POST['form'] == "login") {
+	print_errors();
+}
+?>
+<input type="hidden" name="form" value="login">
+<table id="user_login">
 <tr>
 <td><strong>Username:</strong></td>
-<td><input type="text" name="username" size="30" value="" /></td>
+<td><input type="text" name="uname" size="30" value="" /></td>
 </tr>
 <tr>
 <td><strong>Password:</strong></td>
@@ -37,7 +85,47 @@ print_errors();
 </tr>
 </table>
 </form>
-
+</div>
+<div id="register">
+<h2>Create an account</h2>
+<form method="post" action="admin/login.php">
 <?php
-require_once("footer.php");
+if (isset($_POST['form']) && $_POST['form'] == "register") {
+	print_errors();
+}
+?>
+<input type="hidden" name="form" value="register">
+<table id="user_reg">
+<tr>
+<td><strong>Username:</strong></td>
+<td><input type="text" name="uname" size="30" value="" /></td>
+</tr>
+<td><strong>Email:</strong></td>
+<td><input type="text" name="email" size="30" value="" /></td>
+</tr>
+<td><strong>First name:</strong></td>
+<td><input type="text" name="fname" size="30" value="" /></td>
+</tr>
+<td><strong>Last name:</strong></td>
+<td><input type="text" name="lname" size="30" value="" /></td>
+</tr>
+<tr>
+<td><strong>Password:</strong></td>
+<td><input type="password" name="password" size="30" value="" /></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><input type="submit" value="Login" /></td>
+</tr>
+</table>
+</form>
+</div>
+<br clear="all">
+<?php
+if (file_exists("../".get_phurl_option('theme_path') . "footer.php")) {
+        include ("../".get_phurl_option('theme_path') . "footer.php");
+} else {
+        die ("<h2>Could not load theme</h2>");
+}
+//require_once("footer.php");
 ?>

@@ -1,4 +1,6 @@
 <?php
+ini_set("display_errors", '1');
+error_reporting(E_ALL);
 /* 	
 	You should *only* need to edit this file if your database settings need changing.
 	All options are stored in the database and should be set in the Phurl admin panel.
@@ -14,6 +16,7 @@ define('DB_PREFIX', 'phurl_');
 
 // Do *NOT* mess with anything below
 define('URL_PROTOCOLS', 'http|https|ftp|ftps|mailto|news|mms|rtmp|rtmpt|e2dk');
+define('SITE_SALT', '');
 error_reporting(E_ALL);
 $_ERROR = array();
 
