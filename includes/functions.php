@@ -181,6 +181,7 @@ function is_login() {
 		if (mysql_num_rows($db_result) != 1) {
 			// User's session has expired.
 			return false;
+			session_destroy();
 		} else {
 			$db_row = mysql_fetch_assoc($db_result);
 			$db_result = mysql_query("SELECT * FROM ".DB_PREFIX."users WHERE id='".$db_row['uId']."'");
@@ -208,5 +209,15 @@ function require_login() {
 	}
 }
 function clean_old_sessions() {
-	$db_results = mysql_query("DELETE FROM ".DB_PREFIX."session WHERE time<='".strtotime("-2 weeks")."'");
+	mysql_query("DELETE FROM ".DB_PREFIX."session WHERE time<='".strtotime("-2 weeks")."'");
+}
+function logout() {
+	if (isset($_SESSION[base64_encode('user')])) {
+		$session = $_SESSION[base64_encode('user')];
+		$session = mysql_real_escape_string(trim($session));
+		mysql_query("DELETE FROM ".DB_PREFIX."session WHERE session='".$session."'");
+		clean_old_sessions();
+		session_destroy();
+		header("Location: ".get_phurl_option('site_url'));
+	}
 }

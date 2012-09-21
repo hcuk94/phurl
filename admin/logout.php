@@ -1,13 +1,6 @@
 <?php
-session_start();
-
-$_SESSION = array();
-
-if (isset($_COOKIE[session_name()])) {
-    setcookie(session_name(), '', time()-42000, '/');
-}
-
-session_destroy();
-header("Location: login.php", true, 301);
-
-
+require_once("../includes/config.php");
+require_once("../includes/functions.php");
+db_connect();
+logout();
+?>
