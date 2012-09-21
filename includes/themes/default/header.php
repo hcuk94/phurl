@@ -97,9 +97,16 @@ echo $jquery;
  	<div id="menu">
  		<ul>
  			<li><a href="/">Home</a></li>
-<li><a href="/api/create.php?url=http://example.org/">API</a></li>
+<?php //<li><a href="/api/create.php?url=http://example.org/">API</a></li> ?>
 	<?php if (is_login()) { ?>
- 			<li><a href="/admin/">Panel</a></li>
+ 			<li><a href="/admin/">My URLs</a></li>
+ 			<li><a href="/admin/">My Account</a></li>
+ 			<li><a href="/admin/">Developer</a></li>
+ 			<li><a href="/admin/">Site URLs</a></li>
+	<?php if (is_admin_login()) { ?>
+ 			<li><a href="/admin/">Site Administration</a></li>
+	<?php } ?>
+ 			<li><a href="/admin/logout.php">Logout</a></li>
 	<?php } else { ?>
  			<li><a href="/admin/login.php">Login/Signup</a></li>
 	<?php } ?>

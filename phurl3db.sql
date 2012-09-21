@@ -50,6 +50,6 @@ CREATE TABLE IF NOT EXISTS `phurl_users` (
   `fname` varchar(45) NOT NULL,
   `lname` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

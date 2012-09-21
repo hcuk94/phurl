@@ -1,4 +1,5 @@
 <?php
+session_start();
 $mysql = array();
 
 function db_die($filename, $line, $message) {
@@ -147,13 +148,65 @@ function print_errors() {
         echo "</span>\n";
     }
 }
+function hashPassword ($password) {
+	$password = hash('sha256', hash('sha256', SALT2.$password.hash('sha1',SALT1.$password)).SALT3);
+	return $password;
+}
 function is_admin_login() {
-    if (@$_SESSION['admin'] == 1) {
-        return true;
-    }
-
-    return false;
-    }
+	global $_USER;
+	if ($_USER['type'] == 'a' && is_login()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function require_admin() {
+	if (is_admin_login() == false) {
+		if (!is_login()) {
+			header("Location: ".get_phurl_option("site_url")."/admin/login.php");
+		} else {
+			header("Location: ".get_phurl_option("site_url")."/admin/");
+		}
+		exit();
+	} else {
+		return true;
+	}
+}
 function is_login() {
-return false;
+	if (isset($_SESSION[base64_encode('user')])) {
+		$session = $_SESSION[base64_encode('user')];
+		$session = mysql_real_escape_string(trim($session));
+		clean_old_sessions();
+		$db_result = mysql_query("SELECT uId,ip,time FROM ".DB_PREFIX."session WHERE session='".$session."'");
+		if (mysql_num_rows($db_result) != 1) {
+			// User's session has expired.
+			return false;
+		} else {
+			$db_row = mysql_fetch_assoc($db_result);
+			$db_result = mysql_query("SELECT * FROM ".DB_PREFIX."users WHERE id='".$db_row['uId']."'");
+			$db_row = mysql_fetch_assoc($db_result);
+			global $_USER;
+			$_USER = array();
+			$_USER['id'] = $db_row['id'];
+			$_USER['uname'] = $db_row['uname'];
+			$_USER['fname'] = $db_row['fname'];
+			$_USER['lname'] = $db_row['lname'];
+			$_USER['type'] = $db_row['type'];
+			return true;
+		}
+	} else {
+		// No client side session
+		return false;
+	}
+}
+function require_login() {
+	if (is_login() == false) {
+		header("Location: ".get_phurl_option("site_url")."/admin/login.php");
+		exit();
+	} else {
+		return true;
+	}
+}
+function clean_old_sessions() {
+	$db_results = mysql_query("DELETE FROM ".DB_PREFIX."session WHERE time<='".strtotime("-2 weeks")."'");
 }

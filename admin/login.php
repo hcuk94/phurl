@@ -9,6 +9,9 @@ define('PHURL', true);
 require_once("../includes/config.php");
 require_once("../includes/functions.php");
 db_connect();
+if (is_login()) {
+	header('Location: '.get_phurl_option('site_url').'/admin/');
+}
 
 //require_once("header.php");
 $WORKING_DIR = '../';
@@ -22,7 +25,39 @@ print_errors();
 ?>
 <?php
 if (isset($_POST['form']) && $_POST['form'] == "login") {
-	
+	// Remove some unwanted characters
+	$uname = mysql_real_escape_string(trim($_POST['uname']));
+	$password = mysql_real_escape_string(trim($_POST['password']));
+
+	if (
+	(!isset($uname) || $uname == "") || 
+	(!isset($password) || $password == "")) {
+		if (!isset($uname) || $uname == "") {
+			$_ERROR[] = "Please enter your username.<br />";
+		} 
+		if (!isset($password) || $password == "") {
+			$_ERROR[] = "Please enter your password.<br />";
+		}
+	} else {
+		$password = hashPassword($password);
+		$db_result = mysql_query("SELECT id,uname,email FROM ".DB_PREFIX."users WHERE `uname`='".$uname."' AND `password`='".$password."';");
+		if ($db_result != false && mysql_num_rows($db_result) == 1) {
+			$db_row = mysql_fetch_assoc($db_result);
+			$dbId = $db_row['id'];
+			$dbUname = $db_row['uname'];
+			$dbEmail = $db_row['email'];
+			$_ERROR[] = "Login complete";
+			$session = hash('sha256', hash('sha256', time().SALT3.$dbId.hash('sha1',uniqid().hash('sha1', $password))).$dbUname.SALT4.$dbEmail.time());
+			echo $session;
+			$_SESSION[base64_encode('user')] = $session;
+			$ipAddr = $_SERVER['REMOTE_ADDR'];
+			clean_old_sessions();
+			mysql_query("INSERT INTO ".DB_PREFIX."session (session, uId, ip, time) VALUES ('".$session."', '".$dbId."', '".$ipAddr."', '".time()."')") or die(mysql_error());
+		} else {
+			$_ERROR[] = "There was an error with your username/password.<br />";
+		}
+	}
+
 } elseif (isset($_POST['form']) && $_POST['form'] == "register") {
 
 	// Remove some unwanted characters
@@ -38,8 +73,13 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 	(!isset($email) || $email == "") || 
 	(!isset($fname) || $fname == "") || 
 	(!isset($lname) || $lname == "") || 
-	(!isset($password) || $password == "")) {
-		$_ERROR[] = "Please complete the whole form<br />";
+	(!isset($password) || $password == "") ||
+	(!filter_var($email, FILTER_VALIDATE_EMAIL))) {
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$_ERROR[] = "Please enter a valid email.<br />";
+		} else {
+			$_ERROR[] = "Please complete the whole form.<br />";
+		}
 	} else {
 		//$_ERROR[]
 		// Check if the username or email is already know to us
@@ -56,7 +96,12 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 				}
 			}
 		} else {
-			$passwordNew = hash('sha256', hash('sha256', $password.).SITE_SALT);
+			$passwordNew = hashPassword($password);
+//			echo $password."-".$passwordNew."\n";
+			$db_result = mysql_query("INSERT INTO ".DB_PREFIX."users (uname, fname, lname, email, password) VALUES ('".$uname."', '".$fname."', '".$lname."', '".$email."', '".$passwordNew."')") or db_die(__FILE__, __LINE__, mysql_error());
+			$_ERROR[] = "Your account has been created, you can now login.";
+?>
+<?php
 		}
 	}
 } 
@@ -127,5 +172,4 @@ if (file_exists("../".get_phurl_option('theme_path') . "footer.php")) {
 } else {
         die ("<h2>Could not load theme</h2>");
 }
-//require_once("footer.php");
 ?>

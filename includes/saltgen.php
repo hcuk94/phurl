@@ -1,5 +1,7 @@
 <?php
-echo generate_salt(32)."\n";
+echo generate_salt(64)."\n";
+echo generate_salt(64)."\n";
+echo generate_salt(64)."\n";
 
 function generate_salt($len) {
 	$salt = "";
