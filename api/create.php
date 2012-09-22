@@ -35,10 +35,11 @@ if (isset($_GET['apiKey']) && isset($_GET['url'])) {
 			$data['scheme'] = 'mailto';
 			$data['host'] = 'none';
 		}
-$db_result = mysql_query("SELECT id,apiKey FROM ".DB_PREFIX."users");
-while ($db_row = mysql_fetch_assoc($db_result)) {
-        $validApiKey[$db_row['apiKey']] = '1';
-}
+
+	$db_result = mysql_query("SELECT id,apiKey FROM ".DB_PREFIX."users");
+	while ($db_row = mysql_fetch_assoc($db_result)) {
+	        $validApiKey[$db_row['apiKey']] = 1;
+	}
 
     if (strlen($url) == 0) {
         $_ERROR[] = "01";
