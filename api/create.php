@@ -4,11 +4,11 @@ require_once("../includes/functions.php");
 ini_set('display_errors', 0);
 $prefix[0] = '';
 db_connect();
-if (count($_GET) > 0) {
-	if (count($_GET) > 1) {
+if (count($_GET) > 1) {
+	if (count($_GET) > 2) {
 		$alias = mysql_real_escape_string(trim($_GET['a']));
 	}
-	
+	$apiKey = mysql_real_escape_string(trim($_GET['apiKey']));
 	$url   = mysql_real_escape_string(trim($_GET['url']));
     
     if (!preg_match("/^(".URL_PROTOCOLS.")\:\/\//i", $url)) {
@@ -93,7 +93,7 @@ if (count($_GET) > 0) {
                 break;
             } while (1);
 
-            $id = insert_url($url, $code, $alias);
+            $id = insert_url($url, $code, $alias, $apiKey);
         }
 
         if (strlen($alias) > 0) {

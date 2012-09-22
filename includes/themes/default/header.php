@@ -34,7 +34,8 @@ if (isset( $WORKING_DIR )) {
 	$("input#url").focus();	
 	$("form#surlform").submit(function(){
 		var url = $("input#url").val();	
-		$.get("api/create.php?a=&url=" + url, function(data) {
+		var apiKey = '<?php echo currentApiKey(); ?>'
+		$.get("api/create.php?a=&url=" + url + "&apiKey="+apiKey, function(data) {
         		$("input#url").val(data);
         		$("input#url").select();
 				$('#button').hide();

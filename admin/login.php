@@ -1,7 +1,6 @@
 <?php
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
-session_start();
 
 // Define PHURL to allow includes
 define('PHURL', true);
@@ -48,11 +47,11 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 			$dbEmail = $db_row['email'];
 			$_ERROR[] = "Login complete";
 			$session = hash('sha256', hash('sha256', time().SALT3.$dbId.hash('sha1',uniqid().hash('sha1', $password))).$dbUname.SALT4.$dbEmail.time());
-			echo $session;
 			$_SESSION[base64_encode('user')] = $session;
 			$ipAddr = $_SERVER['REMOTE_ADDR'];
 			clean_old_sessions();
 			mysql_query("INSERT INTO ".DB_PREFIX."session (session, uId, ip, time) VALUES ('".$session."', '".$dbId."', '".$ipAddr."', '".time()."')") or die(mysql_error());
+			header('Location: '.get_phurl_option('site_url').'/admin/');
 		} else {
 			$_ERROR[] = "There was an error with your username/password.<br />";
 		}
@@ -98,7 +97,8 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 		} else {
 			$passwordNew = hashPassword($password);
 //			echo $password."-".$passwordNew."\n";
-			$db_result = mysql_query("INSERT INTO ".DB_PREFIX."users (uname, fname, lname, email, password) VALUES ('".$uname."', '".$fname."', '".$lname."', '".$email."', '".$passwordNew."')") or db_die(__FILE__, __LINE__, mysql_error());
+			$apiKey = apiKeyGen(16);
+			$db_result = mysql_query("INSERT INTO ".DB_PREFIX."users (uname, fname, lname, email, password, apikey) VALUES ('".$uname."', '".$fname."', '".$lname."', '".$email."', '".$passwordNew."', '".$apiKey."')") or db_die(__FILE__, __LINE__, mysql_error());
 			$_ERROR[] = "Your account has been created, you can now login.";
 ?>
 <?php

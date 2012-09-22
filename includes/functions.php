@@ -99,8 +99,8 @@ for ($i=0; $i<$len; $i++)
 return $short;
 }
 
-function insert_url($url, $code, $alias) {
-    mysql_query("INSERT INTO ".DB_PREFIX."urls (url, code, alias, date_added) VALUES ('$url', '$code', '$alias', NOW())") or db_die(__FILE__, __LINE__, mysql_error());
+function insert_url($url, $code, $alias, $apiKey) {
+    mysql_query("INSERT INTO ".DB_PREFIX."urls (url, code, alias, date_added, api) VALUES ('$url', '$code', '$alias', NOW(), '$apiKey')") or db_die(__FILE__, __LINE__, mysql_error());
 
     return mysql_insert_id();
 }
@@ -193,6 +193,7 @@ function is_login() {
 			$_USER['fname'] = $db_row['fname'];
 			$_USER['lname'] = $db_row['lname'];
 			$_USER['type'] = $db_row['type'];
+			$_USER['apiKey'] = $db_row['apiKey'];
 			return true;
 		}
 	} else {
@@ -209,7 +210,7 @@ function require_login() {
 	}
 }
 function clean_old_sessions() {
-	mysql_query("DELETE FROM ".DB_PREFIX."session WHERE time<='".strtotime("-2 weeks")."'");
+	mysql_query("DELETE FROM ".DB_PREFIX."session WHERE time<='".strtotime("-1 week")."'");
 }
 function logout() {
 	if (isset($_SESSION[base64_encode('user')])) {
@@ -221,3 +222,30 @@ function logout() {
 		header("Location: ".get_phurl_option('site_url'));
 	}
 }
+function apiKeyGen($len=16) {
+        $key = "";
+        $numbers = range(0,9);
+	$lcchars = range('a','z');
+	$ucchars = range('A','Z');
+        while ($len > strlen($key)) {
+                $rand = rand(1,3);
+                switch ($rand) {
+                        case 1: $key .= $numbers[array_rand($numbers)]; break;
+                        case 2: $key .= $lcchars[array_rand($lcchars)]; break;
+                        case 3: $key .= $ucchars[array_rand($ucchars)]; break;
+                }
+        }
+        return $key;
+}
+function currentApiKey() {
+	if (is_login()) {
+		global $_USER;
+		return $_USER['apiKey'];
+	} else {
+		$db_result = mysql_query("SELECT apiKey FROM ".DB_PREFIX."users WHERE id='1'");
+		$db_row = mysql_fetch_assoc($db_result);
+		return $db_row['apiKey'];
+	}
+}
+
+?>

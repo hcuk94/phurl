@@ -1,53 +1,46 @@
 <?php
-session_start();
-require_once("../config.php");
-require_once("../functions.php");
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
-if (!is_admin_login()) {
-    header("Location: login.php", true, 301);
-    exit();
-}
+// Define PHURL to allow includes
+define('PHURL', true);
 
-require_once("header.php");
-
+require_once("../includes/config.php");
+require_once("../includes/functions.php");
 db_connect();
 
+require_login();
+$WORKING_DIR = '../';
+if (file_exists("../".get_phurl_option('theme_path') . "header.php")) {
+        include ("../".get_phurl_option('theme_path') . "header.php");
 
-
-$delete_id = (int) @$_GET['delete_id'];
-
-if ($delete_id > 0) {
-    mysql_query("DELETE FROM ".DB_PREFIX."urls WHERE id = '$delete_id'") or db_die(__FILE__, __LINE__, mysql_error());
+} else {
+        die ("<h2>Could not load theme</h2>");
 }
-
-$page = (int) @$_GET['page'];
-
-if ($page < 1) {
-    $page = 1;
+print_errors();
+$db_query = "WHERE ";
+$list = "";
+if (is_admin_login() && isset($_GET['list']) && $_GET['list'] == "all") {
+	$db_query = "";
+	$user = "everyone";
+	$list = "all";
+} else {
+	$db_query .= "api='".$_USER['apiKey']."'";
+	$user = $_USER['uname'];
 }
-
-$db_query = "1 AND ";
-
-$search_alias = mysql_real_escape_string(@$_GET['search_alias']);
-$search_url   = mysql_real_escape_string(@$_GET['search_url']);
-
-if (!empty($search_alias)) {
-    $db_query .= "(code = '$search_alias' OR alias = '$search_alias') AND ";
+$db_start = 0;
+$db_result = mysql_query("SELECT id,uname,apiKey FROM ".DB_PREFIX."users");
+while ($db_row = mysql_fetch_assoc($db_result)) {
+	$userApiLookup[$db_row['apiKey']] = $db_row['uname'];
+	if ($db_row['id'] == 1) {
+		$userApiLookup[$db_row['apiKey']] = "User not logged in";
+	}
 }
-
-if (!empty($search_url)) {
-    $db_query .= "url LIKE '%$search_url%' AND ";
-}
-
-$db_query  = substr($db_query, 0, -5);
-
-$db_result = mysql_query("SELECT COUNT(id) FROM ".DB_PREFIX."urls WHERE $db_query") or db_die(__FILE__, __LINE__, mysql_error());
-$db_row    = mysql_fetch_row($db_result);
-$db_count  = (int) $db_row[0];
-$db_start  = ($page - 1) * 25;
-$db_pages  = ceil($db_count / 25);
-
-$db_result = mysql_query("SELECT * FROM ".DB_PREFIX."urls WHERE $db_query ORDER BY date_added DESC LIMIT $db_start, 25") or db_die(__FILE__, __LINE__, mysql_error());
+?>
+<div id="panel">
+Listing urls created by <?php echo $user; ?>.<br />
+<?php 
+$db_result = mysql_query("SELECT * FROM ".DB_PREFIX."urls $db_query ORDER BY date_added DESC LIMIT $db_start, 25") or db_die(__FILE__, __LINE__, mysql_error());
 
 echo "<table id=\"url_list\">\n";
     echo "<tr>\n".
@@ -56,12 +49,16 @@ echo "<table id=\"url_list\">\n";
          "<td><u>Alias</u></td>\n".
          "<td><u>Long URL</u></td>\n".
          "<td><u>Date Added</u></td>\n".
-         "<td><u>Delete</u></td>\n".
-	  "</tr>\n";
+         "<td><u>View</u></td>\n";
+	if ($list == "all") {
+		echo "<td><u>User</u></td>\n";
+	}
+	echo "</tr>\n";
 
 while ($db_row = mysql_fetch_assoc($db_result)) {
     $db_row = array_filter($db_row, "stripslashes");
 
+	$u_api = "";
     extract($db_row, EXTR_OVERWRITE|EXTR_PREFIX_ALL, "u");
 
     if (empty($u_alias)) {
@@ -69,32 +66,32 @@ while ($db_row = mysql_fetch_assoc($db_result)) {
     }
 
     echo 
-	  "<tr>\n".
-	  "<td>$u_id</td>\n".
-         "<td>$u_code</td>\n".
+	  "<tr>\n";
+	if (is_admin_login()) {
+	  echo "<td>$u_id</td>\n";
+	}
+         echo "<td>$u_code</td>\n".
          "<td>" . htmlentities($u_alias) . "</td>\n".
          "<td>" . htmlentities($u_url) . "</td>\n".
          "<td>$u_date_added</td>\n".
-         "<td><a href=\"javascript:delete_url($u_id);\">Delete</a></td>\n".
-         "</tr>\n";
-unset($u_id, $u_code, $u_alias, $u_url, $u_date_added);
+         "<td><a href=\"/".$u_code."\" target=\"_blank\">Open</a>&nbsp;|&nbsp;<a href=\"/".$u_code."-\" target=\"_black\">Stats</a></td>\n";
+	if ($list == "all") {
+         echo "<td>".$userApiLookup[$u_api]."</td>\n";
+	}
+	
+         echo "</tr>\n";
+unset($u_id, $u_code, $u_alias, $u_url, $u_date_added, $u_api);
 }
-
 echo "</table>\n";
-
-if ($db_count > 25) {
-    echo "<p>\n";
-
-    if ($page > 1) {
-        echo "<a href=\"index.php?page=".($page - 1)."\">&laquo; Prev</a> ";
-    }
-
-    if ($page < $db_pages) {
-        echo "<a href=\"index.php?page=".($page + 1)."\">Next &raquo;</a>";
-    }
-
-    echo "</p>\n";
+?>
+<?php if (is_admin_login() && $list != "all") { ?>
+<a href="/admin/?list=all">Show all created urls</a>
+<?php } ?>
+</div>
+<?php
+if (file_exists("../".get_phurl_option('theme_path') . "footer.php")) {
+        include ("../".get_phurl_option('theme_path') . "footer.php");
+} else {
+        die ("<h2>Could not load theme</h2>");
 }
-
-require_once("footer.php");
-
+?>
