@@ -4,12 +4,16 @@ require_once("../includes/functions.php");
 ini_set('display_errors', 0);
 $prefix[0] = '';
 db_connect();
-if (count($_GET) > 1) {
-	if (count($_GET) > 2) {
+$responce = "text";
+if (isset($_GET['responce']) && ($_GET['responce'] == "json" || $_GET['responce'] == "text")) {
+	$responce = mysql_real_escape_string(trim($_GET['responce']));
+} 
+if (isset($_GET['apiKey']) && isset($_GET['url'])) {
+	if (isset($_GET['a'])) {
 		$alias = mysql_real_escape_string(trim($_GET['a']));
-	}
+	} 
 	$apiKey = mysql_real_escape_string(trim($_GET['apiKey']));
-	$url   = mysql_real_escape_string(trim($_GET['url']));
+	$url = mysql_real_escape_string(trim($_GET['url']));
     
     if (!preg_match("/^(".URL_PROTOCOLS.")\:\/\//i", $url)) {
 		$prefix = explode(":", $url);
@@ -31,11 +35,19 @@ if (count($_GET) > 1) {
 			$data['scheme'] = 'mailto';
 			$data['host'] = 'none';
 		}
+$db_result = mysql_query("SELECT id,apiKey FROM ".DB_PREFIX."users");
+while ($db_row = mysql_fetch_assoc($db_result)) {
+        $validApiKey[$db_row['apiKey']] = '1';
+}
+
     if (strlen($url) == 0) {
         $_ERROR[] = "01";
     }
     else if (empty($data['scheme']) || empty($data['host'])) {
         $_ERROR[] = "02";
+    }
+    else if (!isset($validApiKey[$apiKey]) || $validApiKey[$apiKey] != 1) {
+	$_ERROR[] = "08";
     }
     else {
 	$blcheck = file_get_contents("http://gsb.phurlproject.org/lookup.php?url=$url");
@@ -57,7 +69,7 @@ if (count($_GET) > 1) {
             $_ERROR[] = "06";
         }
     }
-	print_errors();
+//	print_errors();
     if (count($_ERROR) == 0) {
         $create = true;
 
@@ -102,9 +114,30 @@ if (count($_GET) > 1) {
 
         $short_url = get_phurl_option('site_url')."/".$code;
 
-        $_GET['url']   = "";
-        $_GET['alias'] = "";
-	echo "$short_url\n";
-        exit();
+//        $_GET['url']   = "";
+//        $_GET['alias'] = "";
+	if ($responce == "json") {
+		$json = array('code'=>'200', 'request'=>$_GET, 'url'=>$short_url);
+		echo json_encode($json, JSON_FORCE_OBJECT);
+		exit();
+	}
+	if ($responce == "text") {
+		echo "$short_url\n";
+		exit();
+	}
     }
+}
+if (!isset($_GET['apiKey'])) {
+	$_ERROR[] = "07";
+}
+if (!isset($_GET['url'])) {
+	$_ERROR[] = "01";
+}
+if ($responce == "json") {
+	echo json_encode(array('code'=>'400', 'error'=>$_ERROR), JSON_FORCE_OBJECT);
+}
+if ($responce == "text") {
+	foreach ($_ERROR as $errorCode) {
+		echo "error: ".$errorCode."\n";
+	}
 }

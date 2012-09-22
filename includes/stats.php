@@ -36,7 +36,7 @@ print "$m[1]";
 else
 print "<i>(title not detected)</i>";
 ?>
-<br/><b>Long URL: </b><a href="<?php echo $url ?>"><?php echo $url ?></a>
+<br/><b>Long URL: </b><a href="<?php echo get_phurl_option('site_url')."/".$alias; ?>"><?php echo $url ?></a>
 <div id="dynamicdiv" width="100%">
 </div>
 </table>

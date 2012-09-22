@@ -101,10 +101,10 @@ echo $jquery;
 <?php //<li><a href="/api/create.php?url=http://example.org/">API</a></li> ?>
 	<?php if (is_login()) { ?>
  			<li><a href="/admin/">My URLs</a></li>
- 			<li><a href="/admin/">My Account</a></li>
- 			<li><a href="/admin/">Developer</a></li>
- 			<li><a href="/admin/">Site URLs</a></li>
+ 			<li><a href="/admin/account.php">My Account</a></li>
+ 			<li><a href="/admin/api.php">Developer</a></li>
 	<?php if (is_admin_login()) { ?>
+ 			<li><a href="/admin/">Site URLs</a></li>
  			<li><a href="/admin/">Site Administration</a></li>
 	<?php } ?>
  			<li><a href="/admin/logout.php">Logout</a></li>

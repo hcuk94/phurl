@@ -255,3 +255,6 @@ border-style: none;
 	margin: auto;
 	padding: auto;
 }
+#panel {
+	text-align: left;
+}
