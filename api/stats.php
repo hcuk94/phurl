@@ -4,7 +4,7 @@ require_once("../includes/functions.php");
 ini_set('display_errors', 0);
 $prefix[0] = '';
 db_connect();
-$responce = "json";
+$response = "json";
 $locationLimit = 5;
 if (isset($_GET['apiKey']) && isset($_GET['alias'])) {
 	$apiKey = mysql_real_escape_string(trim($_GET['apiKey']));
@@ -51,7 +51,7 @@ if (isset($_GET['apiKey']) && isset($_GET['alias'])) {
 
         $short_url = get_phurl_option('site_url')."/".$code;
 
-	if ($responce == "json") {
+	if ($response == "json") {
 		$json = array('code'=>'200', 'request'=>$_GET, 'url'=>$short_url, 
 		'clicks'=>$totalClicks, 'location'=>$location, 'data'=>$urls);
 		echo json_encode($json, JSON_FORCE_OBJECT);
@@ -65,6 +65,6 @@ if (!isset($_GET['apiKey'])) {
 if (!isset($_GET['alias'])) {
 	$_ERROR[] = "05";
 }
-if ($responce == "json") {
+if ($response == "json") {
 	echo json_encode(array('code'=>'400', 'error'=>$_ERROR), JSON_FORCE_OBJECT);
 }

@@ -4,9 +4,9 @@ require_once("../includes/functions.php");
 ini_set('display_errors', 0);
 $prefix[0] = '';
 db_connect();
-$responce = "text";
-if (isset($_GET['responce']) && ($_GET['responce'] == "json" || $_GET['responce'] == "text")) {
-	$responce = mysql_real_escape_string(trim($_GET['responce']));
+$response = "text";
+if (isset($_GET['response']) && ($_GET['response'] == "json" || $_GET['response'] == "text")) {
+	$response = mysql_real_escape_string(trim($_GET['response']));
 } 
 if (isset($_GET['apiKey']) && isset($_GET['url'])) {
 	if (isset($_GET['a'])) {
@@ -117,12 +117,12 @@ if (isset($_GET['apiKey']) && isset($_GET['url'])) {
 
 //        $_GET['url']   = "";
 //        $_GET['alias'] = "";
-	if ($responce == "json") {
+	if ($response == "json") {
 		$json = array('code'=>'200', 'request'=>$_GET, 'url'=>$short_url);
 		echo json_encode($json, JSON_FORCE_OBJECT);
 		exit();
 	}
-	if ($responce == "text") {
+	if ($response == "text") {
 		echo "$short_url\n";
 		exit();
 	}
@@ -134,10 +134,10 @@ if (!isset($_GET['apiKey'])) {
 if (!isset($_GET['url'])) {
 	$_ERROR[] = "01";
 }
-if ($responce == "json") {
+if ($response == "json") {
 	echo json_encode(array('code'=>'400', 'error'=>$_ERROR), JSON_FORCE_OBJECT);
 }
-if ($responce == "text") {
+if ($response == "text") {
 	foreach ($_ERROR as $errorCode) {
 		echo "error: ".$errorCode."\n";
 	}
