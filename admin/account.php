@@ -36,6 +36,7 @@ if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
 				$_ERROR[] = "You new and old passwords are the same.<br />";
 			} else {
 				$db_result - mysql_query("UPDATE ".DB_PREFIX."users SET password='".$newPassword1."' WHERE id='".$_USER['id']."'");
+		                mysql_query("DELETE FROM ".DB_PREFIX."session WHERE uId='".$_USER['id']."'");
 				logout();
 			}
 		}
@@ -61,7 +62,7 @@ switch ($_USER['type']) {
 echo "<br />\nAPI Key: ".$_USER['apiKey']."<br />\n";
 ?>
 <h3>Change your password</h3>
-<form action="post" action="admin/account.php">
+<form method="post" action="admin/account.php">
 <table width="360"><tr>
 <td>Current password: </td><td><input type="password" size="32" name="curPassword"></td>
 </tr><tr>
