@@ -26,15 +26,15 @@ if (isset($_POST['form']) && isset($_POST['data'])) {
 	$form = mysql_real_escape_string(trim(strtolower($_POST['form'])));
 	$data = mysql_real_escape_string(trim($_POST['data']));
 	if (in_array($form, array('theme_path','phurl_version', 'phurl_numericalversion'))) {
-		$_ERROR[] = "The options you tried to edit is restricted on this panel.";
+		$_ERROR[] = "The options you tried to edit is restricted on this panel. If you need to edit one of these, please do it manually.<br />";
 	} elseif (!in_array($form, array('shortcode_type', 'site_url', 'site_title', 'site_slogan', 'api_limit'))) {
-		$_ERROR[] = "The option you tried to edit is unknown.";
+		$_ERROR[] = "The option you tried to edit is unknown.<br />";
 	} elseif ($data == $options[$form]) {
-		$_ERROR[] = "No changes were made";
+		$_ERROR[] = "No changes were made<br />";
 	}
 	if (count($_ERROR) == 0) {
-		$db_result = mysql_query("UPDATE ".DB_PREFIX."options SET value='".$data."' WHERE ".DB_PREFIX."options.option='site_title'") or die(mysql_error());
-		$_ERROR[] = $form." has been updated. You may need to refresh to see changes.";
+		$db_result = mysql_query("UPDATE ".DB_PREFIX."options SET value='".$data."' WHERE ".DB_PREFIX."options.option='".$form."'") or die(mysql_error());
+		$_ERROR[] = $form." has been updated. You may need to refresh to see changes.<br />";
 		$options[$form] = $data;
 	}
 }
