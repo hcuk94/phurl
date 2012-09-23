@@ -153,8 +153,9 @@ function hashPassword ($password) {
 	return $password;
 }
 function is_admin_login() {
+	is_login();
 	global $_USER;
-	if ($_USER['type'] == 'a' && is_login()) {
+	if (is_login() && $_USER['type'] == 'a') {
 		return true;
 	} else {
 		return false;

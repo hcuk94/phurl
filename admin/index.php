@@ -84,9 +84,6 @@ unset($u_id, $u_code, $u_alias, $u_url, $u_date_added, $u_api);
 }
 echo "</table>\n";
 ?>
-<?php if (is_admin_login() && $list != "all") { ?>
-<a href="/admin/?list=all">Show all created urls</a>
-<?php } ?>
 </div>
 <?php
 if (file_exists("../".get_phurl_option('theme_path') . "footer.php")) {
