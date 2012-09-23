@@ -20,15 +20,24 @@ if (file_exists("../".get_phurl_option('theme_path') . "header.php")) {
 if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
 	if (!isset($_POST['curPassword']) || !isset($_POST['newPassword1']) || !isset($_POST['newPassword2'])) {
 		$_ERROR[] = "One of the required fiels was not set.<br />";
-	} else {
-		$curPassword = hashPassword(mysql_real_escape_string(trim($_POST['curPassword'])));
-		$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])));
-		$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])));
+	}
+	$curPassword = hashPassword(mysql_real_escape_string(trim($_POST['curPassword'])));
+	$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])));
+	$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])));
+	if ($newPassword1 != $newPassword2) {
+		$_ERROR[] = "The new passwords do not match.<br />";
+	} 
+	if (count($_ERROR) == 0) {
 		$db_result = mysql_query("SELECT id,uname,email FROM ".DB_PREFIX."users WHERE `id`='".$_USER['id']."' AND `password`='".$curPassword."';");
 		if (mysql_num_rows($db_result) != 1) {
-			$_ERROR[] = "Your password was incorrect";
+			$_ERROR[] = "Your password was incorrect<br />";
 		} else {
-			
+			if ($newPassword1 == $curPassword) {
+				$_ERROR[] = "You new and old passwords are the same.<br />";
+			} else {
+				$db_result - mysql_query("UPDATE ".DB_PREFIX."users SET password='".$newPassword1."' WHERE id='".$_USER['id']."'");
+				logout();
+			}
 		}
 	}
 }
