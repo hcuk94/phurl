@@ -52,10 +52,12 @@ http://phurl3.lo/PSgCD
 05 - Invalid alias <br />
 06 - Alias already used<br />
 07 - No API Key given<br />
-08 - Invalid API Key<br /><br />
+08 - Invalid API Key<br />
+11 - API Limit exceeded<br /><br />
 <strong>JSON Status Codes</strong><br />
 200 - Success, Short url to follow to follow<br />
 400 - General error code, specific error to follow.<br />
+403 - Forbidden, API Limit hit.<br />
 <hr />
 <h3>GET <?php echo get_phurl_option('site_url')."/api/stats.php"; ?></h3>
 <blockquote>
@@ -85,10 +87,12 @@ Result:<br />
 07 - No API Key given<br />
 08 - Invalid API Key<br />
 09 - Alias not found<br />
-10 - No stats avalible yet<br /><br />
+10 - No stats avalible yet<br />
+11 - API Limit exceeded<br /><br />
 <strong>JSON Status Codes</strong><br />
 200 - Success, Short url to follow to follow<br />
 400 - General error code, specific error to follow.<br />
+403 - Forbidden, API Limit hit.<br />
 <hr />
 </div>
 <?php

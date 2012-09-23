@@ -6,6 +6,29 @@ $prefix[0] = '';
 db_connect();
 $response = "json";
 $locationLimit = 5;
+if (isset($_GET['apiKey'])) {
+$apiLimit = get_phurl_option("api_limit");
+if ((int)$apiLimit != 0) {
+	$apiKey = mysql_real_escape_string(trim($_GET['apiKey']));
+	$db_result = mysql_query("SELECT remain,time FROM ".DB_PREFIX."api WHERE apiKey='$apiKey'") or db_die(__FILE__, __LINE__, mysql_error());
+	if (mysql_num_rows($db_result) == 0) {
+		mysql_query("INSERT INTO ".DB_PREFIX."api (apiKey, time, remain) VALUES('".$apiKey."', '".time()."', ".(int)$apiLimit.")") or db_die(__FILE__, __LINE__, mysql_error());
+		$db_result = mysql_query("SELECT remain,time FROM ".DB_PREFIX."api WHERE apiKey='$apiKey'") or db_die(__FILE__, __LINE__, mysql_error());
+	}
+	$db_row = mysql_fetch_assoc($db_result);
+	if ((int)$db_row['time'] <= time()-60*60) {
+		mysql_query("UPDATE ".DB_PREFIX."api SET remain=".((int)$apiLimit-1).", time='".time()."'") or db_die(__FILE__, __LINE__, mysql_error());
+	} elseif ($db_row['remain'] != 0) {
+		mysql_query("UPDATE ".DB_PREFIX."api SET remain = (remain - 1)") or db_die(__FILE__, __LINE__, mysql_error());
+	} else {
+		$errorCode = 11;
+		if ($response == "json") {
+			echo json_encode(array('code'=>'403', 'error'=>array('0',$errorCode)), JSON_FORCE_OBJECT);
+			exit();
+		}
+	}
+}
+}
 if (isset($_GET['apiKey']) && isset($_GET['alias'])) {
 	$apiKey = mysql_real_escape_string(trim($_GET['apiKey']));
 	$alias = mysql_real_escape_string(trim($_GET['alias']));

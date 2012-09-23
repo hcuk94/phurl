@@ -102,6 +102,7 @@ foreach ($shortCodeType as $value => $name) {
 API Hourly limit: <input type="text" name="data" value="<?php echo $options['api_limit']; ?>" size="32"><br />
 <input type="submit" name="submit" value="Update">
 <input type="hidden" name="form" value="api_limit">
+<small>Setting to 0 will disable api limiting. This is not recommened.</small>
 </form>
 <br />
 
