@@ -31,6 +31,8 @@ if (isset($_POST['form']) && isset($_POST['data'])) {
 		$_ERROR[] = "The option you tried to edit is unknown.<br />";
 	} elseif ($data == $options[$form]) {
 		$_ERROR[] = "No changes were made<br />";
+	} elseif ($form == "shortcode_type" && $data != "r" && $data != "c") {
+		$_ERROR[] = "Not a valid shortcode type<br />";
 	}
 	if (count($_ERROR) == 0) {
 		$db_result = mysql_query("UPDATE ".DB_PREFIX."options SET value='".$data."' WHERE ".DB_PREFIX."options.option='".$form."'") or die(mysql_error());

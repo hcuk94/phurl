@@ -17,10 +17,57 @@ if (file_exists("../".get_phurl_option('theme_path') . "header.php")) {
 } else {
         die ("<h2>Could not load theme</h2>");
 }
-print_errors();
+if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
+	if (!isset($_POST['curPassword']) || !isset($_POST['newPassword1']) || !isset($_POST['newPassword2'])) {
+		$_ERROR[] = "One of the required fiels was not set.<br />";
+	} else {
+		$curPassword = hashPassword(mysql_real_escape_string(trim($_POST['curPassword'])));
+		$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])));
+		$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])));
+		$db_result = mysql_query("SELECT id,uname,email FROM ".DB_PREFIX."users WHERE `id`='".$_USER['id']."' AND `password`='".$curPassword."';");
+		if (mysql_num_rows($db_result) != 1) {
+			$_ERROR[] = "Your password was incorrect";
+		} else {
+			
+		}
+	}
+}
 ?>
 <div id="panel">
-You will be able to change your account password etc. later.
+<strong>You will be able to change your account password and other details later.</strong><br /><br />
+<?php
+print_errors();
+echo "Username: ".$_USER['uname']."<br />\n";
+echo "First name: ".$_USER['fname']."<br />\n";
+echo "Last name: ".$_USER['lname']."<br />\n";
+echo "Email: ".$_USER['email']."<br />\n";
+switch ($_USER['type']) {
+	case 'n':
+		echo "User type: Normal<br />\n";
+		break;
+	case 'a':
+		echo "User type: Admin<br />\n";
+		break;
+}
+echo "<br />\nAPI Key: ".$_USER['apiKey']."<br />\n";
+?>
+<h3>Change your password</h3>
+<form action="post" action="admin/account.php">
+<table width="360"><tr>
+<td>Current password: </td><td><input type="password" size="32" name="curPassword"></td>
+</tr><tr>
+<td>New password: </td><td><input type="password" size="32" name="newPassword1"></td>
+</tr><tr>
+<td>New password again: </td><td><input type="password" size="32" name="newPassword2"></td>
+</tr><tr>
+<td></td><td style="text-align: center;"><input type="submit" value="Change password"></td>
+</tr></table>
+<div style="width: 360px">
+<small>By changing your passwords, all of your current sessions will become invalid, and therefor you will have to login again with the new password.</small>
+</div>
+
+<input type="hidden" name="form" value="passwordChange">
+</form>
 </div>
 <?php
 if (file_exists("../".get_phurl_option('theme_path') . "footer.php")) {

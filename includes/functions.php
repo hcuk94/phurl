@@ -193,6 +193,7 @@ function is_login() {
 			$_USER['uname'] = $db_row['uname'];
 			$_USER['fname'] = $db_row['fname'];
 			$_USER['lname'] = $db_row['lname'];
+			$_USER['email'] = $db_row['email'];
 			$_USER['type'] = $db_row['type'];
 			$_USER['apiKey'] = $db_row['apiKey'];
 			return true;

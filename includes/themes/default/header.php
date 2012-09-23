@@ -104,8 +104,8 @@ echo $jquery;
  			<li><a href="/admin/account.php">My Account</a></li>
  			<li><a href="/admin/api.php">Developer</a></li>
 	<?php if (is_admin_login()) { ?>
- 			<li><a href="/admin/?list=all">Site URLs</a></li>
- 			<li><a href="/admin/site.php">Site Administration</a></li>
+ 			<li><a href="/admin/?list=all">Site URLs*</a></li>
+ 			<li><a href="/admin/site.php">Site Administration*</a></li>
 	<?php } ?>
  			<li><a href="/admin/logout.php">Logout</a></li>
 	<?php } else { ?>

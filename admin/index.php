@@ -43,9 +43,11 @@ Listing urls created by <?php echo $user; ?>.<br />
 $db_result = mysql_query("SELECT * FROM ".DB_PREFIX."urls $db_query ORDER BY date_added DESC LIMIT $db_start, 25") or db_die(__FILE__, __LINE__, mysql_error());
 
 echo "<table id=\"url_list\">\n";
-    echo "<tr>\n".
-         "<td><u>ID</td></u>\n".
-         "<td><u>Code</u></td>\n".
+    echo "<tr>\n";
+	if (is_admin_login()) {
+echo     "<td><u>ID</td></u>\n";
+	}
+echo     "<td><u>Code</u></td>\n".
          "<td><u>Alias</u></td>\n".
          "<td><u>Long URL</u></td>\n".
          "<td><u>Date Added</u></td>\n".

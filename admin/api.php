@@ -27,19 +27,19 @@ Your api key: <?php echo $_USER['apiKey']; ?><br />
 url - The url to be shortend (Required) <br />
 apiKey - The API key to be used (Required) <br />
 a - Alias if desired (Optional) <br />
-responce - Text/Json (Optional) Default is 'Text'<br />
+response - Text/Json (Optional) Default is 'Text'<br />
 </blockquote>
 <h3>Examples:</h3>
-<strong>GET <?php echo get_phurl_option('site_url'); ?>/api/create.php?responce=json&apiKey=<?php echo $_USER['apiKey']; ?>&url=phurlproject.org</strong><br />
+<strong>GET <?php echo get_phurl_option('site_url'); ?>/api/create.php?response=json&apiKey=<?php echo $_USER['apiKey']; ?>&url=phurlproject.org</strong><br />
 <blockquote>
 Result:<br />
 {"code":"200",<br/>
-"request":{"responce":"json",<br />
+"request":{"response":"json",<br />
 "apiKey":"",<br />
 "url":"www.phurlproject.org"},<br />
 "url":"<?php echo get_phurl_option('site_url'); ?>/PSgCD"}
 </blockquote>
-<strong>GET <?php echo get_phurl_option('site_url'); ?>/api/create.php?responce=text&apiKey=<?php echo $_USER['apiKey']; ?>&url=phurlproject.org</strong><br />
+<strong>GET <?php echo get_phurl_option('site_url'); ?>/api/create.php?response=text&apiKey=<?php echo $_USER['apiKey']; ?>&url=phurlproject.org</strong><br />
 <blockquote>
 Result:<br />
 http://phurl3.lo/PSgCD
