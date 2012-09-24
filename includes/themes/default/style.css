@@ -43,32 +43,56 @@ a {
 	margin-left: 5px;
 }
 
-#header #menu {
-	float: right;
-	margin-right: 20px;
+#menu{ 
+    list-style:none;
+    font-weight:bold;
+    float:right;
+    width:auto;
+    margin-right: 2px; 
+    margin-top: 2px;
 }
-
-#header #menu ul {
-	list-style: none;
+#menu li{
+    float:left;
+    margin-right:2px;
+    position:relative;
 }
-
-#header #menu li {
-	float: left;
-	margin: 1px;
+#menu a{
+    display:block;
+    padding:5px;
+    color:#000;
+    background:#eee;
+    text-decoration:none;
 }
-
-#header #menu a {
-	background: #eee;
-	color: #000;
-	padding: 7px;
-	font-weight: bold;
+#menu a:hover{
+    color:#fff;
+    background:#000;
+    text-decoration:none;
 }
-
-#header #menu a:hover {
-	background: #000;
-	color: #ffffff;
-	padding: 7px;
-	font-weight: bold;
+#menu ul{
+    background:#fff; 
+    background:rgba(255,255,255,0);
+    list-style:none;
+    position:absolute;
+    left:-9999px; 
+}
+#menu ul li{
+    padding-top:2px;
+    float:none;
+}
+#menu ul a{
+    white-space:nowrap; 
+}
+#menu li:hover ul{
+    left:0;
+  margin:0;
+  padding:0;
+}
+#menu li:hover ul a{ 
+    text-decoration:none;
+}
+#menu li:hover ul li a:hover{ 
+    background:#000;
+    color: #fff;
 }
 
 .clear {

@@ -96,16 +96,29 @@ echo $jquery;
  	<div id="logo"><h1><?php echo get_phurl_option('site_title'); ?></h1></div>
  	<span id="slogan">- <?php echo get_phurl_option('site_slogan'); ?></span>
  	<div id="menu">
- 		<ul>
+ 		<ul id="menu">
  			<li><a href="/">Home</a></li>
 <?php //<li><a href="/api/create.php?url=http://example.org/">API</a></li> ?>
 	<?php if (is_login()) { ?>
- 			<li><a href="/admin/">My URLs</a></li>
- 			<li><a href="/admin/account.php">My Account</a></li>
- 			<li><a href="/admin/api.php">Developer</a></li>
+<li>
+        <a href="#">My Account</a>
+        <ul>
+            <li><a href="/admin/">My URLs</a></li>
+            <li><a href="/admin/api.php">Developer</a></li>
+            <li><a href="/admin/account.php">Account Settings</a></li>
+        </ul>
+    </li>
 	<?php if (is_admin_login()) { ?>
- 			<li><a href="/admin/?list=all">Site URLs*</a></li>
- 			<li><a href="/admin/site.php">Site Administration*</a></li>
+<li>
+        <a href="#">Site Administration</a>
+
+        <ul>
+            <li><a href="/admin/?list=all">Site URLs</a></li>
+            <li><a href="/admin/users.php">Site Users</a></li>
+            <li><a href="/admin/site.php">Site Settings</a></li>
+        </ul>
+
+    </li>
 	<?php } ?>
  			<li><a href="/admin/logout.php">Logout</a></li>
 	<?php } else { ?>
