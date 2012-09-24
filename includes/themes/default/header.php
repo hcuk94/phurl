@@ -95,7 +95,6 @@ echo $jquery;
  <div id="header">
  	<div id="logo"><h1><?php echo get_phurl_option('site_title'); ?></h1></div>
  	<span id="slogan">- <?php echo get_phurl_option('site_slogan'); ?></span>
- 	<div id="menu">
  		<ul id="menu">
  			<li><a href="/">Home</a></li>
 <?php //<li><a href="/api/create.php?url=http://example.org/">API</a></li> ?>
@@ -127,7 +126,6 @@ echo $jquery;
 
 
  		</ul>
- 	</div>
  	<div class="clear"></div>
  	
  </div>
