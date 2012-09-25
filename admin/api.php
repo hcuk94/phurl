@@ -44,7 +44,7 @@ Result:<br />
 Result:<br />
 http://phurl3.lo/PSgCD
 </blockquote>
-<h3>Errors codes:</h3>
+<h3>Error codes:</h3>
 01 - Long url not set<br />
 02 - Long url not valid<br />
 03 - Listed in url blacklist<br />
@@ -82,7 +82,7 @@ Result:<br />
 "alias":"phurl",<br />
 "date_added":"2012-05-29 12:25:00"}}
 </blockquote>
-<h3>Errors codes:</h3>
+<h3>Error codes:</h3>
 05 - Invalid alias <br />
 07 - No API Key given<br />
 08 - Invalid API Key<br />
