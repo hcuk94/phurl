@@ -54,7 +54,7 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 				mysql_query("INSERT INTO ".DB_PREFIX."session (session, uId, ip, time) VALUES ('".$session."', '".$dbId."', '".$ipAddr."', '".time()."')") or die(mysql_error());
 				header('Location: '.get_phurl_option('site_url').'/admin/');
 			} else {
-				$_ERROR[] = "Account unavalible!<br />"
+				$_ERROR[] = "Account unavalible!<br />";
 			}
 		} else {
 			$_ERROR[] = "There was an error with your username/password.<br />";
