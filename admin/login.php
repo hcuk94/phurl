@@ -42,16 +42,20 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 		$db_result = mysql_query("SELECT id,uname,email FROM ".DB_PREFIX."users WHERE `uname`='".$uname."' AND `password`='".$password."';");
 		if ($db_result != false && mysql_num_rows($db_result) == 1) {
 			$db_row = mysql_fetch_assoc($db_result);
-			$dbId = $db_row['id'];
-			$dbUname = $db_row['uname'];
-			$dbEmail = $db_row['email'];
-			$_ERROR[] = "Login complete";
-			$session = hash('sha256', hash('sha256', time().SALT3.$dbId.hash('sha1',uniqid().hash('sha1', $password))).$dbUname.SALT4.$dbEmail.time());
-			$_SESSION[base64_encode('user')] = $session;
-			$ipAddr = $_SERVER['REMOTE_ADDR'];
-			clean_old_sessions();
-			mysql_query("INSERT INTO ".DB_PREFIX."session (session, uId, ip, time) VALUES ('".$session."', '".$dbId."', '".$ipAddr."', '".time()."')") or die(mysql_error());
-			header('Location: '.get_phurl_option('site_url').'/admin/');
+			if ($db_row['suspended'] != 1) {
+				$dbId = $db_row['id'];
+				$dbUname = $db_row['uname'];
+				$dbEmail = $db_row['email'];
+				$_ERROR[] = "Login complete";
+				$session = hash('sha256', hash('sha256', time().SALT3.$dbId.hash('sha1',uniqid().hash('sha1', $password))).$dbUname.SALT4.$dbEmail.time());
+				$_SESSION[base64_encode('user')] = $session;
+				$ipAddr = $_SERVER['REMOTE_ADDR'];
+				clean_old_sessions();
+				mysql_query("INSERT INTO ".DB_PREFIX."session (session, uId, ip, time) VALUES ('".$session."', '".$dbId."', '".$ipAddr."', '".time()."')") or die(mysql_error());
+				header('Location: '.get_phurl_option('site_url').'/admin/');
+			} else {
+				$_ERROR[] = "Account unavalible!<br />"
+			}
 		} else {
 			$_ERROR[] = "There was an error with your username/password.<br />";
 		}

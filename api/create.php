@@ -65,7 +65,7 @@ if (isset($_GET['apiKey']) && isset($_GET['url'])) {
 			$data['host'] = 'none';
 		}
 
-	$db_result = mysql_query("SELECT id,apiKey FROM ".DB_PREFIX."users");
+	$db_result = mysql_query("SELECT id,apiKey FROM ".DB_PREFIX."users WHERE suspended='0'");
 	while ($db_row = mysql_fetch_assoc($db_result)) {
 	        $validApiKey[$db_row['apiKey']] = 1;
 	}

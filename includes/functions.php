@@ -2,6 +2,9 @@
 session_start();
 $mysql = array();
 
+$_CACHE = array();
+$_CACHE['option'] = array();
+
 function db_die($filename, $line, $message) {
     die("File: $filename<br />Line: $line<br />Message: $message");
 }
@@ -38,9 +41,15 @@ function get_last_number() {
 }
 
 function get_phurl_option($option) {
-	$db_result	=	mysql_query("SELECT `value` FROM `".DB_PREFIX."options` WHERE `option` = '$option'") or db_die(__FILE__, __LINE__, mysql_error());
-	$db_row		=	mysql_fetch_row($db_result);
-	return $db_row[0];
+	global $_CACHE;
+	if (isset($_CACHE['option'][$option])) {
+		return $_CACHE['option'][$option];
+	} else {
+		$db_result	=	mysql_query("SELECT `value` FROM `".DB_PREFIX."options` WHERE `option` = '$option'") or db_die(__FILE__, __LINE__, mysql_error());
+		$db_row		=	mysql_fetch_row($db_result);
+		$_CACHE['option'][$option] = $db_row[0];
+		return $db_row[0];
+	}
 }
 
 function increase_last_number() {

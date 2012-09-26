@@ -1,0 +1,1 @@
+ALTER TABLE `phurl_users` ADD `suspended` ENUM( '0', '1' ) NOT NULL DEFAULT '0';
