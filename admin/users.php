@@ -36,6 +36,7 @@ if (isset($_GET['suspend'])) {
 				$_ERROR[] = "User suspened<br />";
 				mysql_query("UPDATE ".DB_PREFIX."users SET suspended='1' WHERE id='".$sId."'");
 				mysql_query("DELETE FROM ".DB_PREFIX."session WHERE uId='".$sId."'");
+				header('Location: '.get_phurl_option('site_url').'/admin/users.php');
 			}
 		}
 	}
@@ -54,6 +55,7 @@ if (isset($_GET['suspend'])) {
 			} else {
 				$_ERROR[] = "User unsuspened<br />";
 				mysql_query("UPDATE ".DB_PREFIX."users SET suspended='0' WHERE id='".$sId."'");
+				header('Location: '.get_phurl_option('site_url').'/admin/users.php');
 			}
 		}
 	}

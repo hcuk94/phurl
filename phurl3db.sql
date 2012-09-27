@@ -2,8 +2,20 @@
 -- Database: `phurl3`
 --
 --
--- Dump from 22:01 22/09/2012 by Martyn Watton
+-- Dump from 13:43 27/09/2012 by Martyn Watton
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `phurl_api`
+--
+
+CREATE TABLE IF NOT EXISTS `phurl_api` (
+  `apiKey` varchar(32) NOT NULL,
+  `time` int(11) NOT NULL,
+  `remain` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -23,10 +35,12 @@ CREATE TABLE IF NOT EXISTS `phurl_options` (
 INSERT INTO `phurl_options` (`option`, `value`) VALUES
 ('shortcode_type', 'r'),
 ('site_url', 'http://phurl3.lo'),
-('site_title', 'Lorem Ipsum URL Shortener'),
+('site_title', 'phurl 3.0'),
 ('site_slogan', 'URLs made shorter, URLs made simpler.'),
 ('theme_path', 'includes/themes/default/'),
-('phurl_version', '3.0');
+('phurl_version', '3.0'),
+('api_limit', '250'),
+('phurl_numericalversion', '300');
 
 -- --------------------------------------------------------
 
@@ -42,6 +56,8 @@ CREATE TABLE IF NOT EXISTS `phurl_session` (
   `time` int(32) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `phurl_settings`
@@ -119,6 +135,7 @@ CREATE TABLE IF NOT EXISTS `phurl_users` (
   `password` varchar(64) NOT NULL,
   `apiKey` varchar(32) NOT NULL,
   `type` enum('n','a') NOT NULL,
+  `suspended` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
@@ -126,5 +143,6 @@ CREATE TABLE IF NOT EXISTS `phurl_users` (
 -- Dumping data for table `phurl_users`
 --
 
-INSERT INTO `phurl_users` (`id`, `uname`, `fname`, `lname`, `email`, `password`, `apiKey`, `type`) VALUES
-(1, '', '', '', '', '', '20GigZMpBL32vIaY', 'a');
+INSERT INTO `phurl_users` (`id`, `uname`, `fname`, `lname`, `email`, `password`, `apiKey`, `type`, `suspended`) VALUES
+(1, '', '', '', '', '', '20GigZMpBL32vIaY', 'a', '0');
+
