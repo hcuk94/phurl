@@ -39,7 +39,7 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 		}
 	} else {
 		$password = hashPassword($password);
-		$db_result = mysql_query("SELECT id,uname,email FROM ".DB_PREFIX."users WHERE `uname`='".$uname."' AND `password`='".$password."';");
+		$db_result = mysql_query("SELECT id,uname,email,suspended FROM ".DB_PREFIX."users WHERE `uname`='".$uname."' AND `password`='".$password."';");
 		if ($db_result != false && mysql_num_rows($db_result) == 1) {
 			$db_row = mysql_fetch_assoc($db_result);
 			if ($db_row['suspended'] != 1) {
