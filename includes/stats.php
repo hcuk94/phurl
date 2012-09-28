@@ -15,6 +15,9 @@ echo "<div id=\"staterror_title\"><h2>Sad Panda.</h2></div><div id=\"staterror_t
 include get_phurl_option('theme_path').'footer.php';
 die();
 }
+$db_row = mysql_fetch_assoc($result);
+$apiKey = $db_row['api'];
+$expire_date = $db_row['expire_date'];
 $result = mysql_query("SELECT * from ".DB_PREFIX."stats WHERE BINARY alias='$alias'");
 $num_rows = mysql_num_rows($result);
 if ($num_rows < 1) {
@@ -39,4 +42,12 @@ print "<i>(title not detected)</i>";
 <br/><b>Long URL: </b><a href="<?php echo get_phurl_option('site_url')."/".$alias; ?>"><?php echo $url ?></a>
 <div id="dynamicdiv" width="100%">
 </div>
+<?php 
+if (is_login() && $apiKey = $_USER['apiKey']) {
+echo "Your url. ";
+if (strtotime($expire_date) < time()) {
+echo "expired";
+}
+}
+?>
 </table>
