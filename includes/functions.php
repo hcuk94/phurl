@@ -120,7 +120,7 @@ function update_url($id, $alias) {
 
 function get_url($alias) {
     $db_result = mysql_query("SELECT url FROM ".DB_PREFIX."urls WHERE BINARY code = '$alias' OR alias = '$alias'") or db_die(__FILE__, __LINE__, mysql_error());
-    check_expire($alias);
+    redirect_expired($alias);
     if (mysql_num_rows($db_result) > 0) {
         $db_row = mysql_fetch_row($db_result);
 
@@ -134,8 +134,12 @@ function check_expire($alias) {
 	$db_row = mysql_fetch_assoc($db_result);
 	$expire_date = $db_row['expire_date'];
 	if (strtotime($expire_date) < time() && $expire_date != "0000-00-00 00:00:00") {
-		echo "expired";
 		mysql_query("DELETE FROM ".DB_PREFIX."urls WHERE BINARY code='$alias' OR alias='$alias'");
+		return true;
+	}
+}
+function redirect_expired($alias) {
+	if (check_expire() == true) {
 		header('Location: '.get_phurl_option('site_url'));
 		die();
 	}

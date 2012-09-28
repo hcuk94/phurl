@@ -45,9 +45,6 @@ print "<i>(title not detected)</i>";
 <?php 
 if (is_login() && $apiKey = $_USER['apiKey']) {
 echo "Your url. ";
-if (strtotime($expire_date) < time()) {
-echo "expired";
-}
 }
 ?>
 </table>

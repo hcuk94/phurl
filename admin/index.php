@@ -63,6 +63,8 @@ while ($db_row = mysql_fetch_assoc($db_result)) {
 	$u_api = "";
     extract($db_row, EXTR_OVERWRITE|EXTR_PREFIX_ALL, "u");
 
+if (check_expire($u_alias) != true) {
+
     if (empty($u_alias)) {
         $u_alias = "";
     }
@@ -83,6 +85,7 @@ while ($db_row = mysql_fetch_assoc($db_result)) {
 	
          echo "</tr>\n";
 unset($u_id, $u_code, $u_alias, $u_url, $u_date_added, $u_api);
+}
 }
 echo "</table>\n";
 ?>
