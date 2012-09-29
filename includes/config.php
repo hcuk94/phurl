@@ -22,5 +22,5 @@ define('SALT3', '2lMw?r1Vfk9.w(mH%mJdYN}FpH^e@+O2}+*eU$9!&DY09~&CP)=7Uy1##a+*t8<
 define('SALT4', 'i$m?r{U6OENyY.7@}.CXJ[Q?).*{.qOnVv~1{H~g[(F&?$|E<}S-[0@3X-<2Ir@');
 error_reporting(E_ALL);
 $_ERROR = array();
-
+$_ENABLE_GEO = false;
 ?>

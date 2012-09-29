@@ -139,7 +139,7 @@ function check_expire($alias) {
 	}
 }
 function redirect_expired($alias) {
-	if (check_expire() == true) {
+	if (check_expire($alias) == true) {
 		header('Location: '.get_phurl_option('site_url'));
 		die();
 	}
@@ -271,6 +271,23 @@ function currentApiKey() {
 		$db_row = mysql_fetch_assoc($db_result);
 		return $db_row['apiKey'];
 	}
+}
+
+if ($_ENABLE_GEO == true) {
+if (!file_exists("includes/geoip/geo-ipv6.dat")) die("ERROR! Please run includes/geoip/download.php before continuing.\n");
+function maxmind_geoip($ipaddr) {
+	if (filter_var($ipaddr, FILTER_VALIDATE_IP)) {
+		$gi = geoip_open("includes/geoip/geo-ipv6.dat",GEOIP_STANDARD);
+		if (filter_var($ipaddr, FILTER_FLAG_IPV4)) {
+			$ipaddr = "::".$ipaddr;
+		}
+		$cc = geoip_country_code_by_addr_v6($gi, $ipaddr);
+		if ($cc == '') {
+			$cc = "Unknown";
+		}
+		return $cc;
+	}
+}
 }
 
 ?>

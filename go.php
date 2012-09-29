@@ -1,6 +1,8 @@
 <?php
 header("HTTP/1.0 200 OK");
 require_once("includes/config.php");
+require_once("includes/geoip/geoip.inc");
+$_ENABLE_GEO = true;
 require_once("includes/functions.php");
 require_once ("includes/isoregion.php");
 db_connect();
@@ -28,11 +30,7 @@ if (preg_match("/^[a-zA-Z0-9_-]+\-$/", $alias)) {
 		include "includes/themes/default/footer.php";
 		die();
 	} else {
-    $ipad=$_SERVER['REMOTE_ADDR'];
-    $country = file_get_contents("http://api.hostip.info/country.php?ip=$ipad");
-    if ($country == 'XX') {
-     $country = 'Unknown';
-    }
+    $country = maxmind_geoip($_SERVER['REMOTE_ADDR']);
     $result=mysql_query("SELECT count(*) as numrecords FROM ".DB_PREFIX."stats WHERE BINARY alias='$alias' and country='$country'") or die ('An error was encountered. Please refer to phurl support for more info. :('); 
     $row=mysql_fetch_assoc($result);
     if ($row['numrecords'] >= 1){
