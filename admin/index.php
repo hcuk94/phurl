@@ -51,6 +51,7 @@ echo     "<td><u>Code</u></td>\n".
          "<td><u>Alias</u></td>\n".
          "<td><u>Long URL</u></td>\n".
          "<td><u>Date Added</u></td>\n".
+         "<td><u>Expire date</u></td>\n".
          "<td><u>View</u></td>\n";
 	if ($list == "all") {
 		echo "<td><u>User</u></td>\n";
@@ -63,12 +64,14 @@ while ($db_row = mysql_fetch_assoc($db_result)) {
 	$u_api = "";
     extract($db_row, EXTR_OVERWRITE|EXTR_PREFIX_ALL, "u");
 
-if (check_expire($u_alias) != true) {
+if (check_expire($u_code) != true) {
 
     if (empty($u_alias)) {
         $u_alias = "";
     }
-
+    if ($u_expire_date == "0000-00-00 00:00:00") {
+	$u_expire_date = "Never";
+    }
     echo 
 	  "<tr>\n";
 	if (is_admin_login()) {
@@ -78,6 +81,7 @@ if (check_expire($u_alias) != true) {
          "<td>" . htmlentities($u_alias) . "</td>\n".
          "<td>" . htmlentities($u_url) . "</td>\n".
          "<td>$u_date_added</td>\n".
+         "<td>$u_expire_date</td>\n".
          "<td><a href=\"/".$u_code."\" target=\"_blank\">Open</a>&nbsp;|&nbsp;<a href=\"/".$u_code."-\" target=\"_black\">Stats</a></td>\n";
 	if ($list == "all") {
          echo "<td>".$userApiLookup[$u_api]."</td>\n";

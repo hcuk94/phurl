@@ -44,6 +44,22 @@ print "<i>(title not detected)</i>";
 </div>
 <?php 
 if (is_login() && $apiKey = $_USER['apiKey']) {
+if (isset($_POST['form']) && isset($_POST['expire_date']) && $_POST['form'] == "expire_date") {
+$new_expire_date = mysql_real_escape_strin(trim($_POST['expire_date']));
+if ($new_expire_date != $expire_date) {
+	mysql_query("UPDATE ".DB_PREFIX."urls WHERE alias='$alias' OR code='$alias' SET expire_date='$new_expire_date'");
+	$expire_date = $new_expire_date;
+}
+}
+?>
+<form method="get" action="update_url.php">
+<h4>Update url expire time</h4>
+Expire: <input type="text" value="<?php echo $expire_date; ?>" name="expire_date"><br />
+<input type="submit" value="Set expire time" name="submit">
+<input type="hidden" name="form" value="expire_date">
+<input type="hidden" name="alias" value="<?php echo $alias; ?>">
+</form>
+<?php
 echo "Your url. ";
 }
 ?>
