@@ -1,7 +1,9 @@
 <?php
-echo generate_salt(64)."\n";
-echo generate_salt(64)."\n";
-echo generate_salt(64)."\n";
+$i = 0;
+while ($i < 4) {
+	$i++;
+	echo "define('SALT".$i."', '".generate_salt(64)."');\n";
+}
 
 function generate_salt($len) {
 	$salt = "";
