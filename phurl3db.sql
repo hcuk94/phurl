@@ -2,7 +2,7 @@
 -- Database: `phurl3`
 --
 --
--- Dump from 13:43 27/09/2012 by Martyn Watton
+-- Dump from 10:36 30/09/2012 by Martyn Watton
 --
 
 -- --------------------------------------------------------
@@ -106,6 +106,7 @@ CREATE TABLE IF NOT EXISTS `phurl_urls` (
   `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `alias` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `expire_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ip` text NOT NULL,
   `api` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
@@ -117,8 +118,8 @@ CREATE TABLE IF NOT EXISTS `phurl_urls` (
 -- Dumping data for table `phurl_urls`
 --
 
-INSERT INTO `phurl_urls` (`id`, `url`, `code`, `alias`, `date_added`, `ip`, `api`) VALUES
-(1, 'http://www.phurlproject.org/', 'a', 'phurl', '2012-05-29 12:25:00', '127.0.0.1', '20GigZMpBL32vIaY');
+INSERT INTO `phurl_urls` (`id`, `url`, `code`, `alias`, `date_added`, `expire_date`, `ip`, `api`) VALUES
+(1, 'http://www.phurlproject.org/', 'a', 'phurl', '2012-05-29 12:25:00', '0000-00-00 00:00:00', '127.0.0.1', '20GigZMpBL32vIaY');
 
 -- --------------------------------------------------------
 
@@ -145,4 +146,3 @@ CREATE TABLE IF NOT EXISTS `phurl_users` (
 
 INSERT INTO `phurl_users` (`id`, `uname`, `fname`, `lname`, `email`, `password`, `apiKey`, `type`, `suspended`) VALUES
 (1, '', '', '', '', '', '20GigZMpBL32vIaY', 'a', '0');
-
