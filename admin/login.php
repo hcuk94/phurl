@@ -38,7 +38,16 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 			$_ERROR[] = "Please enter your password.<br />";
 		}
 	} else {
-		$password = hashPassword($password);
+		$db_result = mysql_query("SELECT salt FROM ".DB_PREFIX."users WHERE `uname`='".$uname."';");
+		if ($db_result != false && mysql_num_rows($db_result) == 1) {
+			$db_row = mysql_fetch_assoc($db_result);
+			$customSalt = (string)$db_row['salt'];
+			$password = hashPassword($password, $customSalt);
+			echo $customSalt."-".$password;
+		} else {
+			die("Salt not found!");
+			$password = "";
+		}
 		$db_result = mysql_query("SELECT id,uname,email,suspended FROM ".DB_PREFIX."users WHERE `uname`='".$uname."' AND `password`='".$password."';");
 		if ($db_result != false && mysql_num_rows($db_result) == 1) {
 			$db_row = mysql_fetch_assoc($db_result);
@@ -99,10 +108,11 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 				}
 			}
 		} else {
-			$passwordNew = hashPassword($password);
+			$customSalt = generate_salt(16);
+			$passwordNew = hashPassword($password, $customSalt);
 //			echo $password."-".$passwordNew."\n";
 			$apiKey = apiKeyGen(16);
-			$db_result = mysql_query("INSERT INTO ".DB_PREFIX."users (uname, fname, lname, email, password, apikey) VALUES ('".$uname."', '".$fname."', '".$lname."', '".$email."', '".$passwordNew."', '".$apiKey."')") or db_die(__FILE__, __LINE__, mysql_error());
+			$db_result = mysql_query("INSERT INTO ".DB_PREFIX."users (uname, fname, lname, email, password, apikey, salt) VALUES ('".$uname."', '".$fname."', '".$lname."', '".$email."', '".$passwordNew."', '".$apiKey."', '".$customSalt."')") or db_die(__FILE__, __LINE__, mysql_error());
 			$_ERROR[] = "Your account has been created, you can now login.";
 ?>
 <?php

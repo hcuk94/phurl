@@ -162,8 +162,8 @@ function print_errors() {
         echo "</span>\n";
     }
 }
-function hashPassword ($password) {
-	$password = hash('sha256', hash('sha256', SALT2.$password.hash('sha1',SALT1.$password)).SALT3);
+function hashPassword ($password, $customSalt) {
+	$password = hash('sha256', hash('sha256', SALT2.$password.hash('sha1',SALT1.$password).passwordSalt($customSalt)).SALT3);
 	return $password;
 }
 function is_admin_login() {
@@ -279,6 +279,79 @@ function maxmind_geoip($ipaddr) {
 		return $cc;
 	}
 }
+}
+function generate_salt($len) {
+	$salt = "";
+	$numbers = array("0","1","2","3","4","5","6","7","8","9");
+	$lcchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+	$ucchars = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+	$symbols = array('!','@','#','$','%','^','&','*','(',')','-','~','+','=','|','/','{','}',':',';',',','.','?','<','>','[');
+	while ($len > strlen($salt)) {
+		$rand = rand(1,5);
+		switch ($rand) {
+			case 1:
+				$salt .= $numbers[array_rand($numbers)];
+				break;
+			case 2:
+				$salt .= $lcchars[array_rand($lcchars)];
+				break;
+			case 3:
+				$salt .= $ucchars[array_rand($ucchars)];
+				break;
+			case 4:
+				$salt .= $symbols[array_rand($symbols)];
+				break;
+			case 5:
+				$salt .= $symbols[array_rand($symbols)];
+				break;
+
+		}
+	}
+	return $salt;
+}
+function passwordSalt ($custom) {
+	$string = sha1($custom.SALT2);
+
+	$i = 0;
+	while ($i < strlen($custom) && $i < 5) {
+		$char = $custom[0];
+		$custom = substr($custom, 1);
+		$no = (ord($char) % 4);
+		$modifier[$i] = $no+1;
+		$i++;
+	}
+
+	$salt = "";
+	$numbers = array("0","1","2","3","4","5","6","7","8","9","0","1","2","3","4","5","6","7","8","9","0","1","2","3","4","5");
+	$lcchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+	$ucchars = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+	$symbols = array('!','@','#','$','%','^','&','*','(',')','-','~','+','=','|','/','{','}',':',';',',','.','?','<','>','[');
+
+	$i = 0;
+	while (strlen($string) > 0) {
+		$char = $string[0];
+		$no = ord($char) % 26;
+		switch ($modifier[$i]) {
+			case 1:
+				$salt .= $numbers[$no];
+				break;
+			case 2:
+				$salt .= $lcchars[$no];
+				break;
+			case 3:
+				$salt .= $ucchars[$no];
+				break;
+			case 4:
+				$salt .= $symbols[$no];
+				break;
+		}
+		$i++;
+		if ($i == 5) {
+			$i = 0;
+		}
+		$string = substr($string, 1);
+	}
+	return $salt;
 }
 
 ?>

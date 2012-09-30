@@ -21,9 +21,17 @@ if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
 	if (!isset($_POST['curPassword']) || !isset($_POST['newPassword1']) || !isset($_POST['newPassword2'])) {
 		$_ERROR[] = "One of the required fiels was not set.<br />";
 	}
-	$curPassword = hashPassword(mysql_real_escape_string(trim($_POST['curPassword'])));
-	$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])));
-	$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])));
+	$db_result = mysql_query("SELECT salt FROM ".DB_PREFIX."users WHERE `id`='".$_USER['id']."';");
+	if ($db_result != false && mysql_num_rows($db_result) == 1) {
+		$db_row = mysql_fetch_assoc($db_result);
+		$customSalt = (string)$db_row['salt'];
+	} else {
+		die("Salt not found!");
+	}
+
+	$curPassword = hashPassword(mysql_real_escape_string(trim($_POST['curPassword'])), $customSalt);
+	$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])), $customSalt);
+	$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])), $customSalt);
 	if ($newPassword1 != $newPassword2) {
 		$_ERROR[] = "The new passwords do not match.<br />";
 	} 
