@@ -85,8 +85,8 @@ if (isset($_GET['apiKey']) && isset($_GET['url'])) {
  	     $_ERROR[] = "03";
 	}
         $hostname = get_hostname();
-        $domain   = get_domain();
-        if (preg_match("/($hostname|$domain)/i", $data['host'])) {
+        if (preg_match("/($hostname)/i", $data['host'])) {
+		echo $hostname."|".$domain."|".$data['host'];
             $_ERROR[] = "04";
         }
     }

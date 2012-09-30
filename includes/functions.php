@@ -149,15 +149,6 @@ function get_hostname() {
 
     return $data['host'];
 }
-
-function get_domain() {
-    $hostname = get_hostname();
-
-    preg_match("/\.([^\/]+)/", $hostname, $domain);
-
-    return $domain[1];
-}
-
 function print_errors() {
     global $_ERROR;
 
