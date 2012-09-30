@@ -8,6 +8,7 @@ die;
 }
 $alias = str_replace("-","",$alias);
 $url   = get_url($alias);
+$url   = htmlspecialchars($url);
 $result = mysql_query("SELECT * from ".DB_PREFIX."urls WHERE BINARY alias='$alias' OR code='$alias'");
 $num_rows = mysql_num_rows($result);
 if ($num_rows < 1) {
