@@ -7,15 +7,15 @@ require_once("includes/functions.php");
 require_once ("includes/isoregion.php");
 db_connect();
 
-$getalias = trim(mysql_real_escape_string($_SERVER['REQUEST_URI']));
-$alias = substr($getalias, 1, strlen($getalias));
+$aliasP = trim(mysql_real_escape_string($_GET['alias']));
+//echo $aliasP;
+//$alias = substr($getalias, 1, strlen($getalias));
 
+if (isset($_POST['urlPass'])) {
+$aliasPassword = trim(mysql_real_escape_string($_POST['urlPass']));
 if (preg_match("/^[a-zA-Z0-9_-]+\-$/", $alias)) {
-  define('PHURL', true);
-  include "includes/themes/default/header.php";
-  include "includes/stats.php";
-  include "includes/themes/default/footer.php";
-  die();
+  header("Location: ".get_phurl_option('site_url'), true, 301);
+  exit();
 } elseif (!preg_match("/^[a-zA-Z0-9_]+$/", $alias)) {
   header("Location: ".get_phurl_option('site_url'), true, 301);
   exit();
@@ -30,13 +30,12 @@ if (preg_match("/^[a-zA-Z0-9_-]+\-$/", $alias)) {
 		include "includes/themes/default/footer.php";
 		die();
 	} else {
+	$aliasPassword = hashPassword($aliasPassword, hash('sha1', $url));
 	$db_result = mysql_query("SELECT password FROM ".DB_PREFIX."urls WHERE alias='$alias' OR code='$alias'");
 	$urlPass = mysql_fetch_assoc($db_result);
 	$urlPass = $urlPass['password'];
-	if ($urlPass != "") {
-		header("Location: password.php?alias=".$alias);
-		exit();
-	}
+//echo $urlPass."-".$aliasPassword."\n\n";
+	if ($urlPass != "" && $aliasPassword = $urlPass) {
     $country = maxmind_geoip($_SERVER['REMOTE_ADDR']);
     $result=mysql_query("SELECT count(*) as numrecords FROM ".DB_PREFIX."stats WHERE BINARY alias='$alias' and country='$country'") or die ('An error was encountered. Please refer to phurl support for more info. :('); 
     $row=mysql_fetch_assoc($result);
@@ -47,8 +46,29 @@ mysql_query("INSERT INTO ".DB_PREFIX."stats (alias, country, clicks) VALUES ('$a
 } 
 header("Location: $url", true, 301);
        exit();
+} else {
+	header("Location: password.php?alias=".$alias."&e=wrongpass");
+        exit();
+}
 }
 }
 }
  header("Location: ".get_phurl_option('site_url'), true, 301);
+} else {
+	define('PHURL', true);
+	include "includes/themes/default/header.php";
 ?>
+<h3>The url you have navigated to is password projected!</h3>
+You must enter the password below before you can continue.
+<form action="password.php?alias=<?php echo $aliasP; ?>" method="post">
+Password: <input type="password" name="urlPass"><br />
+<input type="submit" value="Submit">
+<input type="hidden" name="alias" value="<?php echo $aliasP; ?>">
+<input type="hidden" name="form" value="aliasPassword">
+</form>
+<?php
+	include "includes/themes/default/footer.php";
+exit();
+}
+?>
+Something went wrong here!
