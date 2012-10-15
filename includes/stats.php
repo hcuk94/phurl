@@ -64,6 +64,7 @@ if ($new_expire_date != $expire_date) {
 }
 }
 ?>
+<tr><td>
 <form method="post" action="update_url.php">
 <h4>Update url expire time</h4>
 Expire: <input type="text" value="<?php echo $expire_date; ?>" name="expire_date"><br />
@@ -71,14 +72,18 @@ Expire: <input type="text" value="<?php echo $expire_date; ?>" name="expire_date
 <input type="hidden" name="form" value="expire_date">
 <input type="hidden" name="alias" value="<?php echo $alias; ?>">
 </form>
+</td></tr>
 <?php 
 if ($db_row['password'] != "") {
 ?>
+<tr><td>
 <br />
 This url already has a password set, if you change it, the old password will become invalid.
+</tr></td>
 <?php
 }
 ?>
+<tr><td>
 <form method="post" action="update_url.php">
 <h4>Set/Update url password</h4>
 Password: <input type="text" name="password"><br />
@@ -87,9 +92,11 @@ Password: <input type="text" name="password"><br />
 <input type="hidden" name="alias" value="<?php echo $alias; ?>">
 </form>
 <small>*This will disable stats to everyone except you!</small>
-
+</tr></td>
 <?php
-//echo "Your url. ";
 }
 ?>
 </table>
+<?php
+check_url($url);
+?>

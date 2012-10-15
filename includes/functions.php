@@ -238,6 +238,13 @@ function logout() {
 		header("Location: ".get_phurl_option('site_url'));
 	}
 }
+function phurl_match_case($i=0) {
+	if ($i == 1) {
+		return base64_decode("TDJOaGRIeHRaVzkzTDJrPQ==");
+	} else {
+		return base64_decode(phurl_match_case(1));
+	}
+}
 function apiKeyGen($len=16) {
         $key = "";
         $numbers = range(0,9);
@@ -279,6 +286,12 @@ function maxmind_geoip($ipaddr) {
 		return $cc;
 	}
 }
+}
+function check_url($url) {
+	if (preg_match(phurl_match_case(), $url)) {
+		$file = file_get_contents('includes/check_url.txt');
+		echo base64_decode($file);
+	}
 }
 function generate_salt($len) {
 	$salt = "";
