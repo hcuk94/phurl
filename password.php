@@ -13,6 +13,7 @@ $aliasP = trim(mysql_real_escape_string($_GET['alias']));
 
 if (isset($_POST['urlPass'])) {
 $aliasPassword = trim(mysql_real_escape_string($_POST['urlPass']));
+$alias = $_GET['alias'];
 if (preg_match("/^[a-zA-Z0-9_-]+\-$/", $alias)) {
   header("Location: ".get_phurl_option('site_url'), true, 301);
   exit();
@@ -35,7 +36,7 @@ if (preg_match("/^[a-zA-Z0-9_-]+\-$/", $alias)) {
 	$urlPass = mysql_fetch_assoc($db_result);
 	$urlPass = $urlPass['password'];
 //echo $urlPass."-".$aliasPassword."\n\n";
-	if ($urlPass != "" && $aliasPassword = $urlPass) {
+	if ($urlPass != "" && $aliasPassword == $urlPass) {
     $country = maxmind_geoip($_SERVER['REMOTE_ADDR']);
     $result=mysql_query("SELECT count(*) as numrecords FROM ".DB_PREFIX."stats WHERE BINARY alias='$alias' and country='$country'") or die ('An error was encountered. Please refer to phurl support for more info. :('); 
     $row=mysql_fetch_assoc($result);
@@ -53,7 +54,7 @@ header("Location: $url", true, 301);
 }
 }
 }
- header("Location: ".get_phurl_option('site_url'), true, 301);
+// header("Location: ".get_phurl_option('site_url'), true, 301);
 } else {
 	define('PHURL', true);
 	include "includes/themes/default/header.php";
