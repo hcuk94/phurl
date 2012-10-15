@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `phurl_stats` (
 --
 
 INSERT INTO `phurl_stats` (`alias`, `country`, `clicks`) VALUES
-('a', 'GB', 1);
+('a', 'GB', 1),
 
 -- --------------------------------------------------------
 
@@ -107,19 +107,20 @@ CREATE TABLE IF NOT EXISTS `phurl_urls` (
   `alias` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `expire_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `password` varchar(255) NOT NULL,
   `ip` text NOT NULL,
   `api` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `alias` (`alias`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `phurl_urls`
 --
 
-INSERT INTO `phurl_urls` (`id`, `url`, `code`, `alias`, `date_added`, `expire_date`, `ip`, `api`) VALUES
-(1, 'http://www.phurlproject.org/', 'a', 'phurl', '2012-05-29 12:25:00', '0000-00-00 00:00:00', '127.0.0.1', '20GigZMpBL32vIaY');
+INSERT INTO `phurl_urls` (`id`, `url`, `code`, `alias`, `date_added`, `expire_date`, `password`, `ip`, `api`) VALUES
+(1, 'http://www.phurlproject.org/', 'a', 'phurl', '2012-05-29 12:25:00', '0000-00-00 00:00:00', '', '127.0.0.1', '20GigZMpBL32vIaY'),
 
 -- --------------------------------------------------------
 
@@ -137,12 +138,14 @@ CREATE TABLE IF NOT EXISTS `phurl_users` (
   `apiKey` varchar(32) NOT NULL,
   `type` enum('n','a') NOT NULL,
   `suspended` enum('0','1') NOT NULL DEFAULT '0',
+  `salt` varchar(16) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `phurl_users`
 --
 
-INSERT INTO `phurl_users` (`id`, `uname`, `fname`, `lname`, `email`, `password`, `apiKey`, `type`, `suspended`) VALUES
-(1, '', '', '', '', '', '20GigZMpBL32vIaY', 'a', '0');
+INSERT INTO `phurl_users` (`id`, `uname`, `fname`, `lname`, `email`, `password`, `apiKey`, `type`, `suspended`, `salt`) VALUES
+(1, '', '', '', '', '', '20GigZMpBL32vIaY', 'a', '0', '');
+
