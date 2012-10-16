@@ -131,8 +131,17 @@ This action was performed by ".$ipAddr."
 		$fromEmail = "no-reply@".$site_host;
 	}
 	mail($db_row['email'], "Phurl Password Reset (".$site_url.")", $emailBody, "From: ".$fromEmail) or die('Fatal Error! Failed to send email! Password will not be reset!');
-
-
+?>
+<h4>Step 4:</h4>
+Your password has been reset.<br />
+You can now login with the password sent to you in the first email.
+<?php
+if (file_exists(get_phurl_option('theme_path') . "footer.php")) {
+	include (get_phurl_option('theme_path') . "footer.php");
+} else {
+	die ("<h2>Could not load theme</h2>");
+}
+exit();
 }
 ?>
 <h4>Step 1:</h4>
