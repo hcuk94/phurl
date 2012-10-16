@@ -41,8 +41,10 @@ if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
 		if (mysql_num_rows($db_result) != 1) {
 			$_ERROR[] = "Your password was incorrect<br />";
 		} else {
-			$db_result - mysql_query("UPDATE ".DB_PREFIX."users SET password='".$newPassword1."', salt='".$newSalt."' WHERE id='".$_USER['id']."'");
+			$db_result = mysql_query("UPDATE ".DB_PREFIX."users SET password='".$newPassword1."', salt='".$newSalt."' WHERE id='".$_USER['id']."'");
 	                mysql_query("DELETE FROM ".DB_PREFIX."session WHERE uId='".$_USER['id']."'");
+			header('Location: '.get_phurl_option('site_url').'/admin/login.php');
+			exit();
 		}
 	}
 }

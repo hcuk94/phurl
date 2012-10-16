@@ -86,7 +86,7 @@ This url already has a password set, if you change it, the old password will bec
 <tr><td>
 <form method="post" action="update_url.php">
 <h4>Set/Update url password</h4>
-Password: <input type="text" name="password"><br />
+Password: <input type="password" name="password"><br />
 <input type="submit" value="Set url password" name="submit">
 <input type="hidden" name="form" value="url_password">
 <input type="hidden" name="alias" value="<?php echo $alias; ?>">
