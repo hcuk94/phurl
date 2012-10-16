@@ -1,3 +1,0 @@
-ALTER TABLE `phurl_users` ADD `suspended` ENUM( '0', '1' ) NOT NULL DEFAULT '0';
-ALTER TABLE `phurl_urls` ADD `expire_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER `date_added`;
-INSERT INTO `phurl_options` (`option`, `value`) VALUES ('api_limit', '250'), ('phurl_numericalversion', '300');
