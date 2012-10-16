@@ -30,8 +30,9 @@ if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
 	}
 
 	$curPassword = hashPassword(mysql_real_escape_string(trim($_POST['curPassword'])), $customSalt);
-	$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])), $customSalt);
-	$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])), $customSalt);
+	$newSalt = generate_salt(16);
+	$newPassword1 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword1'])), $newSalt);
+	$newPassword2 = hashPassword(mysql_real_escape_string(trim($_POST['newPassword2'])), $newSalt);
 	if ($newPassword1 != $newPassword2) {
 		$_ERROR[] = "The new passwords do not match.<br />";
 	} 
@@ -43,7 +44,7 @@ if (isset($_POST['form']) && $_POST['form'] == "passwordChange") {
 			if ($newPassword1 == $curPassword) {
 				$_ERROR[] = "You new and old passwords are the same.<br />";
 			} else {
-				$db_result - mysql_query("UPDATE ".DB_PREFIX."users SET password='".$newPassword1."' WHERE id='".$_USER['id']."'");
+				$db_result - mysql_query("UPDATE ".DB_PREFIX."users SET password='".$newPassword1."', salt='".$newSalt."' WHERE id='".$_USER['id']."'");
 		                mysql_query("DELETE FROM ".DB_PREFIX."session WHERE uId='".$_USER['id']."'");
 				logout();
 			}
