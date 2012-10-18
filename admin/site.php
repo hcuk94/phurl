@@ -59,6 +59,9 @@ echo "<center><p style=\"color:green;\">A new version of Phurl is available! Dow
 elseif ($version < $current && $version !== $current) {
 echo "<center><p style=\"color:blue;\">It seems you are running a prerelease version of Phurl. Expect Bugs!</p></center><hr/>";
 }*/
+if (!is_readable("../includes/geoip/geo-ipv6.dat") || !file_exists("../includes/geoip/geo-ipv6.dat")) {
+	echo "<center><p style=\"color:red;\">You have not downloaded the Maxmind GeoIP Database yet. You can do so <a href=\"includes/geoip/download.php\">here.</a></p></center><hr/>";
+}
 print_errors();
 ?>
 <form method="post" action="admin/site.php">
@@ -145,7 +148,8 @@ foreach ($userSett as $value => $name) {
 <input type="hidden" name="form" value="user_sett">
 </form>
 <br />
-
+<h4>Advanced</h4>
+<a href="includes/geoip/download.php">Update Maxmind GeoIP Database.</a>
 
 </div>
 <?php
