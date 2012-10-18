@@ -86,9 +86,12 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 	(!isset($fname) || $fname == "") || 
 	(!isset($lname) || $lname == "") || 
 	(!isset($password) || $password == "") ||
-	(!filter_var($email, FILTER_VALIDATE_EMAIL))) {
+	(!filter_var($email, FILTER_VALIDATE_EMAIL)) || 
+	(user_sett('signup') == false)) {
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$_ERROR[] = "Please enter a valid email.<br />";
+		} elseif (user_sett('signup') == false) {
+			$_ERROR[] = "User sign up has been disabled the the site adminsitrator, please try again later.<br />";
 		} else {
 			$_ERROR[] = "Please complete the whole form.<br />";
 		}
@@ -147,6 +150,12 @@ if (isset($_POST['form']) && $_POST['form'] == "login") {
 </div>
 <div id="register">
 <h2>Create an account</h2>
+<?php
+if (user_sett('signup') == false) {
+	$_ERROR[] = "User sign up has been disabled the the site adminsitrator, please try again later.<br />";
+	print_errors();
+} else {
+?>
 <form method="post" action="admin/login.php">
 <?php
 if (isset($_POST['form']) && $_POST['form'] == "register") {
@@ -178,6 +187,7 @@ if (isset($_POST['form']) && $_POST['form'] == "register") {
 </tr>
 </table>
 </form>
+<?php } ?>
 </div>
 <br clear="all">
 <?php

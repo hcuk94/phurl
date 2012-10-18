@@ -366,5 +366,19 @@ function passwordSalt ($custom) {
 	}
 	return $salt;
 }
+function user_sett($type) {
+	$setting = get_phurl_option('user_sett');
+	if ($type == 'api') {
+		$setting = substr($setting, -1);
+	} elseif ($type == 'signup') {
+		$setting = substr($setting, 0, 1);
+	} 
+	if ($setting == 1) {
+		return true;
+	} elseif ($setting == 0) {
+		return false;
+	}
+}
+
 
 ?>

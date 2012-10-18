@@ -38,7 +38,9 @@ if (isset($_GET['apiKey']) && isset($_GET['alias'])) {
 
 	$db_result = mysql_query("SELECT id,apiKey FROM ".DB_PREFIX."users WHERE suspended='0'");
 	while ($db_row = mysql_fetch_assoc($db_result)) {
-	        $validApiKey[$db_row['apiKey']] = 1;
+		if (user_sett('api') == true || (user_sett('api') == false && $db_row['id'] != '1')) {
+	        	$validApiKey[$db_row['apiKey']] = 1;
+		}
 	}
 
     if (!isset($validApiKey[$apiKey]) || $validApiKey[$apiKey] != 1) {

@@ -27,12 +27,16 @@ if (isset($_POST['form']) && isset($_POST['data'])) {
 	$data = mysql_real_escape_string(trim($_POST['data']));
 	if (in_array($form, array('theme_path','phurl_version', 'phurl_numericalversion'))) {
 		$_ERROR[] = "The options you tried to edit is restricted on this panel. If you need to edit one of these, please do it manually.<br />";
-	} elseif (!in_array($form, array('shortcode_type', 'site_url', 'site_title', 'site_slogan', 'api_limit'))) {
+	} elseif (!in_array($form, array('shortcode_type', 'site_url', 'site_title', 'site_slogan', 'api_limit', 'pr_email', 'user_sett'))) {
 		$_ERROR[] = "The option you tried to edit is unknown.<br />";
 	} elseif ($data == $options[$form]) {
 		$_ERROR[] = "No changes were made<br />";
 	} elseif ($form == "shortcode_type" && $data != "r" && $data != "c") {
 		$_ERROR[] = "Not a valid shortcode type<br />";
+	} elseif ($form == "pr_email" && !filter_var($data, FILTER_VALIDATE_EMAIL)) {
+		$_ERROR[] = "Not a valid email!<br />";
+	} elseif ($form == "user_sett" && !in_array($data, array('00', '01', '10', '11'))) {
+		$_ERROR[] = "Unknown user setting.<br />";
 	}
 	if (count($_ERROR) == 0) {
 		$db_result = mysql_query("UPDATE ".DB_PREFIX."options SET value='".$data."' WHERE ".DB_PREFIX."options.option='".$form."'") or die(mysql_error());
@@ -44,7 +48,7 @@ if (isset($_POST['form']) && isset($_POST['data'])) {
 <div id="panel">
 <h3>Site admin</h3>
 <?php
-$updateurl = "http://liveupdate.hencogroup.co.uk/os/phurl/latest.txt";
+/*$updateurl = "http://liveupdate.hencogroup.co.uk/os/phurl/latest.txt";
 $fh = fopen($updateurl, 'r');
 $version = fread($fh, 3);
 fclose($fh);
@@ -54,7 +58,7 @@ echo "<center><p style=\"color:green;\">A new version of Phurl is available! Dow
 } 
 elseif ($version < $current && $version !== $current) {
 echo "<center><p style=\"color:blue;\">It seems you are running a prerelease version of Phurl. Expect Bugs!</p></center><hr/>";
-}
+}*/
 print_errors();
 ?>
 <form method="post" action="admin/site.php">
@@ -105,6 +109,43 @@ API Hourly limit: <input type="text" name="data" value="<?php echo $options['api
 <small>Setting to 0 will disable api limiting. This is not recommened.</small>
 </form>
 <br />
+
+<form method="post" action="admin/site.php">
+Password reset From email: <input type="text" name="data" value="<?php echo $options['pr_email']; ?>" size="32"><br />
+<input type="submit" name="submit" value="Update">
+<input type="hidden" name="form" value="pr_email">
+<?php
+$site_host = $options['site_url'];
+$site_host = str_replace("http://", "", $site_host);
+$site_host = str_replace("https://", "", $site_host);
+?>
+<small>Must be a valid email, default is no-reply@<?php echo $site_host; ?></small>
+</form>
+<br />
+
+<form method="post" action="admin/site.php">
+User settings: 
+<select name="data">
+<?php
+$userSett = array(
+'11'=>'User sign up and public api enabled',
+'10'=>'User sign up enabled, public api disabled',
+'01'=>'User sign up disabled, public api enabled',
+'00'=>'User sign up and public api disabled',);
+foreach ($userSett as $value => $name) {
+	$selected = "";
+	if ($value == $options['user_sett']) {
+		$selected = "selected=\"selected\" ";
+	}
+	echo "<option value=\"".$value."\"".$selected.">".$name."</option>\n";
+}
+?>
+</select><br />
+<input type="submit" name="submit" value="Update">
+<input type="hidden" name="form" value="user_sett">
+</form>
+<br />
+
 
 </div>
 <?php

@@ -134,7 +134,8 @@ This action was performed by ".$ipAddr."
 ?>
 <h4>Step 4:</h4>
 Your password has been reset.<br />
-You can now login with the password sent to you in the first email.
+You can now login with the password sent to you in the first email.<br />
+We recommend that you change your password  after you have logged in.
 <?php
 if (file_exists(get_phurl_option('theme_path') . "footer.php")) {
 	include (get_phurl_option('theme_path') . "footer.php");
