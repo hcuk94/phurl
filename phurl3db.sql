@@ -2,7 +2,7 @@
 -- Database: `phurl3`
 --
 --
--- Dump from 10:36 30/09/2012 by Martyn Watton
+-- Dump from 11:07 18/10/2012 by Martyn Watton
 --
 
 -- --------------------------------------------------------
@@ -40,7 +40,23 @@ INSERT INTO `phurl_options` (`option`, `value`) VALUES
 ('theme_path', 'includes/themes/default/'),
 ('phurl_version', '3.0'),
 ('api_limit', '250'),
-('phurl_numericalversion', '300');
+('phurl_numericalversion', '300'),
+('pr_email', ''),
+('user_sett', '11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `phurl_passReset`
+--
+
+CREATE TABLE IF NOT EXISTS `phurl_passReset` (
+  `uId` int(11) NOT NULL,
+  `temp_pass` varchar(255) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `ip` text NOT NULL,
+  `hash` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -92,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `phurl_stats` (
 --
 
 INSERT INTO `phurl_stats` (`alias`, `country`, `clicks`) VALUES
-('a', 'GB', 1),
+('a', 'GB', 1);
 
 -- --------------------------------------------------------
 
@@ -113,14 +129,14 @@ CREATE TABLE IF NOT EXISTS `phurl_urls` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `alias` (`alias`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `phurl_urls`
 --
 
 INSERT INTO `phurl_urls` (`id`, `url`, `code`, `alias`, `date_added`, `expire_date`, `password`, `ip`, `api`) VALUES
-(1, 'http://www.phurlproject.org/', 'a', 'phurl', '2012-05-29 12:25:00', '0000-00-00 00:00:00', '', '127.0.0.1', '20GigZMpBL32vIaY'),
+(1, 'http://www.phurlproject.org/', 'a', 'phurl', '2012-05-29 12:25:00', '0000-00-00 00:00:00', '', '127.0.0.1', '20GigZMpBL32vIaY');
 
 -- --------------------------------------------------------
 

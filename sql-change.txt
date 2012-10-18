@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS `phurl_passReset` (
+  `uId` int(11) NOT NULL,
+  `temp_pass` varchar(255) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `ip` text NOT NULL,
+  `hash` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `phurl_options` (`option`, `value`) VALUES
+('pr_email', ''),
+('user_sett', '11');
+
