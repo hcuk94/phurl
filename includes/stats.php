@@ -3,8 +3,8 @@ require_once "config.php";
 error_reporting(0);
 db_connect();
 if (empty($alias)) {
-echo 'Please specify an alias.';
-die;
+	echo 'Please specify an alias.';
+	die;
 }
 $alias = str_replace("-","",$alias);
 $url   = get_url($alias);
@@ -12,9 +12,9 @@ $url   = htmlspecialchars($url);
 $result = mysql_query("SELECT * from ".DB_PREFIX."urls WHERE BINARY alias='$alias' OR code='$alias'");
 $num_rows = mysql_num_rows($result);
 if ($num_rows < 1) {
-echo "<div id=\"staterror_title\"><h2>Sad Panda.</h2></div><div id=\"staterror_text\"><p style=\"font-size: 10pt;\">The URL you requested doesn't exist.<br/>So we can't provide any stats for it, sadly.<br/>You could always <a href=\"". get_phurl_option('site_url') ."\" >shorten a new URL</a>.<br/>:(</p></div><br/>";
-include get_phurl_option('theme_path').'footer.php';
-die();
+	echo "<div id=\"staterror_title\"><h2>Sad Panda.</h2></div><div id=\"staterror_text\"><p style=\"font-size: 10pt;\">The URL you requested doesn't exist.<br/>So we can't provide any stats for it, sadly.<br/>You could always <a href=\"". get_phurl_option('site_url') ."\" >shorten a new URL</a>.<br/>:(</p></div><br/>";
+	include get_phurl_option('theme_path').'footer.php';
+	die();
 }
 $db_row = mysql_fetch_assoc($result);
 $apiKey = $db_row['api'];
@@ -34,9 +34,9 @@ if ($num_rows < 1) {
 <h3>Statistics for <a href="<?php echo get_phurl_option('site_url'); ?>/<?php echo $alias ?>"><?php echo get_phurl_option('site_url'); ?>/<?php echo $alias ?></a></h3>
 <?php 
 if ($db_row['password'] != "") {
-?>
+	?>
 <h4>This url is password protected, only you can view the stats.</h4>
-<?php
+	<?php
 }
 ?>
 <table width="60%" align="center">

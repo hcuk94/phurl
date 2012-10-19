@@ -11,7 +11,7 @@ ini_set('display_errors', 0);
 $prefix[0] = '';
 $filename = 'install';
 if (is_dir($filename)) {
-    die ("To get Phurl up and running, you first need to go through the <a href=\"install\">installation wizard</a> which will help you set up your new URL shortener in a matter of moments.<br/><br/>If you've already installed Phurl, then you MUST delete the install directory before it will function.");
+	die ("To get Phurl up and running, you first need to go through the <a href=\"install\">installation wizard</a> which will help you set up your new URL shortener in a matter of moments.<br/><br/>If you've already installed Phurl, then you MUST delete the install directory before it will function.");
 }
 
 // include the magic
@@ -28,8 +28,6 @@ if (file_exists(get_phurl_option('theme_path') . "header.php")) {
 }
 
 include (get_phurl_option('theme_path') . "forms/shorten.php");
-
-
 
 if (file_exists(get_phurl_option('theme_path') . "footer.php")) {
 	include (get_phurl_option('theme_path') . "footer.php");

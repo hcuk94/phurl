@@ -13,7 +13,6 @@ require_login();
 $WORKING_DIR = '../';
 if (file_exists("../".get_phurl_option('theme_path') . "header.php")) {
         include ("../".get_phurl_option('theme_path') . "header.php");
-
 } else {
         die ("<h2>Could not load theme</h2>");
 }
